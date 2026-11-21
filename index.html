@@ -1,0 +1,1588 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>初一生动生物动画学习 · 北师大版第3章</title>
+<style>
+/* SECTION: reset */
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{font-size:16px;-webkit-tap-highlight-color:transparent}
+body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Microsoft YaHei",sans-serif;background:linear-gradient(135deg,#e8f5e9 0%,#e3f2fd 50%,#f3e5f5 100%);min-height:100vh;color:#263238;line-height:1.6}
+
+/* SECTION: layout */
+.container{max-width:860px;margin:0 auto;padding:16px}
+.header{text-align:center;padding:24px 0 12px}
+.header h1{font-size:1.5rem;background:linear-gradient(135deg,#1b5e20,#0277bd);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.header .sub{font-size:.85rem;color:#78909c;margin-top:4px}
+
+/* SECTION: search */
+.search-box{position:relative;margin:16px 0}
+.search-box input{width:100%;padding:14px 50px 14px 18px;font-size:16px;border:2px solid #b2dfdb;border-radius:16px;outline:none;background:#fff;transition:border-color .3s}
+.search-box input:focus{border-color:#00897b}
+.search-box .icon{position:absolute;right:16px;top:50%;transform:translateY(-50%);width:28px;height:28px;border-radius:50%;background:#00897b;color:#fff;display:flex;align-items:center;justify-content:center;font-size:.85rem;cursor:pointer;border:none}
+
+/* SECTION: tags */
+.quick-tags{display:flex;flex-wrap:wrap;gap:6px;margin:12px 0}
+.tag-group-label{width:100%;font-size:.78rem;color:#78909c;margin:6px 0 2px 4px;font-weight:600}
+.tag-btn{padding:6px 14px;border:2px solid #b2dfdb;border-radius:20px;background:#fff;color:#00695c;font-size:.84rem;cursor:pointer;transition:all .25s;min-height:40px;display:flex;align-items:center}
+.tag-btn:hover,.tag-btn.active{background:#00897b;color:#fff;border-color:#00897b;transform:translateY(-1px);box-shadow:0 2px 8px rgba(0,137,123,.3)}
+.tag-btn.cat-plant{border-color:#a5d6a7;color:#2e7d32}
+.tag-btn.cat-plant:hover,.tag-btn.cat-plant.active{background:#2e7d32;border-color:#2e7d32}
+.tag-btn.cat-animal{border-color:#ef9a9a;color:#c62828}
+.tag-btn.cat-animal:hover,.tag-btn.cat-animal.active{background:#c62828;border-color:#c62828}
+.tag-btn.cat-organelle{border-color:#ce93d8;color:#6a1b9a}
+.tag-btn.cat-organelle:hover,.tag-btn.cat-organelle.active{background:#6a1b9a;border-color:#6a1b9a}
+
+/* SECTION: content */
+.main{display:flex;flex-direction:column;gap:16px;margin-top:12px}
+.canvas-wrap{background:#fff;border-radius:20px;padding:12px;box-shadow:0 4px 24px rgba(0,0,0,.07);position:relative;overflow:hidden}
+.canvas-wrap canvas{display:block;width:100%;border-radius:12px}
+.phase-indicator{position:absolute;bottom:20px;left:50%;transform:translateX(-50%);background:rgba(0,137,123,.88);color:#fff;padding:6px 18px;border-radius:20px;font-size:.82rem;white-space:nowrap;pointer-events:none;opacity:0;transition:opacity .3s}
+.phase-indicator.show{opacity:1}
+
+/* SECTION: info panel */
+.info-panel{background:#fff;border-radius:20px;padding:22px;box-shadow:0 4px 24px rgba(0,0,0,.07)}
+.term-name{font-size:1.5rem;font-weight:700;color:#00695c}
+.term-pinyin{font-size:.82rem;color:#90a4ae;margin-left:8px}
+.term-def{margin-top:12px;padding:14px;background:#e8f5e9;border-radius:12px;font-size:.95rem;line-height:1.8;border-left:4px solid #00897b}
+.key-points{margin-top:14px}
+.key-points h3{font-size:.92rem;color:#546e7a;margin-bottom:8px}
+.key-points li{padding:5px 0 5px 18px;font-size:.88rem;position:relative;list-style:none}
+.key-points li::before{content:"▸";position:absolute;left:0;color:#00897b}
+.replay-btn{margin-top:16px;padding:10px 24px;background:linear-gradient(135deg,#00897b,#0277bd);color:#fff;border:none;border-radius:12px;font-size:.92rem;cursor:pointer;min-height:44px;transition:transform .2s}
+.replay-btn:hover{transform:scale(1.03)}
+
+/* SECTION: hierarchy */
+.hierarchy{display:flex;align-items:center;justify-content:center;gap:4px;flex-wrap:wrap;padding:14px;background:#fff;border-radius:16px;box-shadow:0 2px 12px rgba(0,0,0,.05);margin-top:8px}
+.h-item{padding:5px 10px;border-radius:8px;font-size:.82rem;font-weight:600;cursor:pointer;transition:all .25s;min-height:36px;display:flex;align-items:center}
+.h-item:hover{transform:scale(1.08)}
+.h-arrow{color:#b0bec5;font-size:.75rem}
+.h-c1{background:#e8f5e9;color:#2e7d32}.h-c2{background:#e3f2fd;color:#1565c0}
+.h-c3{background:#fff3e0;color:#e65100}.h-c4{background:#f3e5f5;color:#7b1fa2}
+.h-c5{background:#fce4ec;color:#c62828}.h-c6{background:#fff8e1;color:#f57f17}
+.h-c7{background:#e0f2f1;color:#00695c}
+
+/* SECTION: welcome */
+.welcome{text-align:center;padding:50px 20px;color:#78909c}
+.welcome .ico{font-size:3rem;margin-bottom:14px}
+.welcome p{font-size:.92rem;line-height:1.9}
+.welcome strong{color:#00695c}
+
+.footer{text-align:center;padding:20px;color:#b0bec5;font-size:.78rem}
+
+/* SECTION: responsive */
+@media(min-width:640px){.main{flex-direction:row}.canvas-wrap,.info-panel{flex:1;min-width:0}}
+@media(max-width:480px){.header h1{font-size:1.25rem}.tag-btn{padding:5px 10px;font-size:.78rem;min-height:36px}.term-name{font-size:1.2rem}.h-item{font-size:.76rem;padding:4px 8px}}
+</style>
+</head>
+<body>
+<div class="container">
+  <!-- SECTION: header -->
+  <div class="header">
+    <h1>🔬 初一生动生物 · 动画学习</h1>
+    <div class="sub">北师大版 · 第3章 · 细胞是生命活动的基本单位</div>
+  </div>
+
+  <!-- SECTION: search -->
+  <div class="search-box">
+    <input type="text" id="searchInput" placeholder="输入生物学名词，如：细胞分裂、线粒体、上皮组织…" autocomplete="off">
+    <button class="icon" id="searchBtn" aria-label="搜索">🔍</button>
+  </div>
+
+  <div class="quick-tags" id="quickTags"></div>
+
+  <!-- SECTION: main content -->
+  <div class="main" id="mainContent" style="display:none">
+    <div class="canvas-wrap">
+      <canvas id="animCanvas"></canvas>
+      <div class="phase-indicator" id="phaseText"></div>
+    </div>
+    <div class="info-panel" id="infoPanel"></div>
+  </div>
+
+  <!-- SECTION: welcome -->
+  <div class="welcome" id="welcomeView">
+    <div class="ico">🧬</div>
+    <p>在上方输入框中键入生物学名词<br>或点击下方标签，即可观看动画演示</p>
+    <p style="margin-top:10px;font-size:.84rem;color:#b0bec5">支持19个核心概念：细胞基础、细胞器、组织类型、结构层次</p>
+  </div>
+
+  <!-- SECTION: hierarchy -->
+  <div class="hierarchy" id="hierarchyBar"></div>
+
+  <div class="footer">七年级生物 · 北师大版 · 互动学习工具</div>
+</div>
+
+<script>
+/* ===== SECTION: data ===== */
+var TERMS = {
+  '细胞': {
+    pinyin: 'xì bāo', cat: 'basic',
+    def: '细胞是生物体结构和功能的基本单位。它由细胞膜、细胞质和细胞核等部分组成，是生命活动的基本场所。',
+    points: ['所有生物（除病毒外）都由细胞构成', '细胞膜控制物质进出', '细胞核内含遗传物质，是细胞的控制中心', '细胞质是生命活动的主要场所'],
+    color: '#4caf50'
+  },
+  '细胞分裂': {
+    pinyin: 'xì bāo fēn liè', cat: 'basic',
+    def: '细胞分裂是指一个细胞分成两个细胞的过程。分裂时，细胞核先由一个分成两个，随后细胞质分成两份，每份各含一个细胞核，最后形成两个新细胞。',
+    points: ['细胞核先分裂（染色体复制后均分）', '然后细胞质分裂', '动物细胞：细胞膜从中凹陷缢裂', '植物细胞：在中央形成新的细胞膜和细胞壁', '分裂使细胞数目增多'],
+    color: '#1565c0'
+  },
+  '细胞生长': {
+    pinyin: 'xì bāo shēng zhǎng', cat: 'basic',
+    def: '细胞生长是指细胞从周围环境中吸收营养物质，并转化为自身组成物质，使细胞体积由小变大的过程。',
+    points: ['细胞吸收营养物质', '细胞体积逐渐增大', '液泡由小变大、由多变少', '细胞生长使细胞体积增大', '细胞不能无限长大'],
+    color: '#e65100'
+  },
+  '细胞分化': {
+    pinyin: 'xì bāo fēn huà', cat: 'basic',
+    def: '细胞分化是指在个体发育过程中，一个或一种细胞通过分裂产生的后代，在形态、结构和功能上发生差异性的变化。细胞分化的结果是形成不同的组织。',
+    points: ['分裂后的细胞在形态和功能上发生变化', '分化产生不同类型的细胞', '如：神经细胞、肌肉细胞、红细胞等', '细胞分化形成组织', '分化过程中遗传物质不变'],
+    color: '#7b1fa2'
+  },
+  '线粒体': {
+    pinyin: 'xiàn lì tǐ', cat: 'organelle',
+    def: '线粒体是细胞中进行有氧呼吸的主要场所，被称为细胞的"动力车间"。它能将有机物中的化学能释放出来，供细胞利用。',
+    points: ['细胞的"动力车间"', '有氧呼吸的主要场所', '将有机物中的化学能转化为细胞可利用的能量（ATP）', '具有双层膜结构，内膜向内折叠形成嵴', '动植物细胞中都含有线粒体'],
+    color: '#6a1b9a'
+  },
+  '叶绿体': {
+    pinyin: 'yè lǜ tǐ', cat: 'organelle',
+    def: '叶绿体是植物细胞中进行光合作用的场所，被称为细胞的"能量转换站"。它能利用光能将二氧化碳和水转化为有机物，并释放氧气。',
+    points: ['植物细胞的"能量转换站"', '光合作用的场所', '利用光能将CO₂和H₂O转化为有机物', '释放氧气', '含有叶绿素，呈绿色', '具有双层膜结构，内有类囊体'],
+    color: '#2e7d32'
+  },
+  '组织': {
+    pinyin: 'zǔ zhī', cat: 'basic',
+    def: '组织是由形态相似、结构和功能相同的细胞联合在一起形成的细胞群。细胞分化产生了不同的组织。',
+    points: ['由许多形态相似的细胞组成', '同一组织的细胞功能相同', '人体四大基本组织：上皮组织、结缔组织、肌肉组织、神经组织', '植物组织：保护组织、营养组织、输导组织等'],
+    color: '#c62828'
+  },
+  '上皮组织': {
+    pinyin: 'shàng pí zǔ zhī', cat: 'animal-tissue',
+    def: '上皮组织由上皮细胞构成，细胞排列紧密，细胞间质少。主要分布在体表和体内各种管腔壁的内表面，具有保护、分泌等功能。',
+    points: ['细胞排列紧密，细胞间质少', '覆盖在体表或衬于体内管腔壁', '功能：保护、分泌、吸收', '如：皮肤表皮、消化道内壁、腺体'],
+    color: '#e65100'
+  },
+  '结缔组织': {
+    pinyin: 'jié dì zǔ zhī', cat: 'animal-tissue',
+    def: '结缔组织的种类很多，细胞间质发达。具有支持、连接、保护、营养等功能，是人体内分布最广的组织。',
+    points: ['种类多：骨组织、血液、脂肪组织、韧带等', '细胞间质发达', '功能：支持、连接、保护、营养', '是人体分布最广的组织'],
+    color: '#0277bd'
+  },
+  '肌肉组织': {
+    pinyin: 'jī ròu zǔ zhī', cat: 'animal-tissue',
+    def: '肌肉组织主要由肌细胞构成，具有收缩和舒张的功能，能使身体各部分产生运动。',
+    points: ['主要由肌细胞（肌纤维）构成', '具有收缩和舒张功能', '分为三种：骨骼肌、平滑肌、心肌', '骨骼肌受意识控制，平滑肌和心肌不受意识控制'],
+    color: '#c62828'
+  },
+  '神经组织': {
+    pinyin: 'shén jīng zǔ zhī', cat: 'animal-tissue',
+    def: '神经组织主要由神经细胞（神经元）构成，能够感受刺激、产生和传导兴奋，在体内起着调节和控制的作用。',
+    points: ['主要由神经细胞（神经元）构成', '能感受刺激，产生和传导兴奋', '在体内起调节和控制作用', '神经元有突起（树突和轴突），适于传导信息'],
+    color: '#4a148c'
+  },
+  '保护组织': {
+    pinyin: 'bǎo hù zǔ zhī', cat: 'plant-tissue',
+    def: '保护组织一般由植物根、茎、叶表面的表皮细胞构成，细胞排列紧密，具有保护内部柔嫩部分的功能。',
+    points: ['分布在植物体表面', '细胞排列紧密，外壁常有角质层', '保护内部柔嫩部分', '如：叶片表皮、根表皮'],
+    color: '#33691e'
+  },
+  '薄壁组织': {
+    pinyin: 'bó bì zǔ zhī', cat: 'plant-tissue',
+    def: '薄壁组织也叫营养组织，细胞壁薄、液泡大，具有储存营养物质、进行光合作用等功能，广泛分布在植物体的各个器官中。',
+    points: ['也叫营养组织', '细胞壁薄，液泡大', '含叶绿体的可进行光合作用', '果肉、叶肉中大量存在', '功能：储存营养、光合作用'],
+    color: '#558b2f'
+  },
+  '分生组织': {
+    pinyin: 'fēn shēng zǔ zhī', cat: 'plant-tissue',
+    def: '分生组织的细胞小、细胞壁薄、细胞核大、细胞质浓，具有很强的分裂能力，能不断分裂产生新细胞。',
+    points: ['细胞小、壁薄、核大、质浓', '具有很强的分裂能力', '能不断产生新细胞', '分布在根尖分生区、茎尖生长点、形成层'],
+    color: '#1b5e20'
+  },
+  '输导组织': {
+    pinyin: 'shū dǎo zǔ zhī', cat: 'plant-tissue',
+    def: '输导组织贯穿于植物体的各个器官中，负责运输水分、无机盐和有机物。主要包括导管和筛管。',
+    points: ['导管：运输水和无机盐（由下向上）', '筛管：运输有机物（由上向下）', '贯穿植物体各器官', '导管细胞是死细胞，筛管细胞是活细胞'],
+    color: '#00695c'
+  },
+  '器官': {
+    pinyin: 'qì guān', cat: 'basic',
+    def: '器官是由不同的组织按照一定的次序结合在一起，形成的具有一定功能的结构。如心脏、胃、肝脏、眼等。',
+    points: ['由多种组织构成', '具有一定的结构和功能', '如心脏（泵血）、胃（消化）、肺（呼吸）', '植物器官：根、茎、叶、花、果实、种子'],
+    color: '#f57f17'
+  },
+  '系统': {
+    pinyin: 'xì tǒng', cat: 'basic',
+    def: '系统是能够共同完成一种或几种生理功能的多个器官按照一定的次序组合在一起形成的。人体有八大系统协调配合，完成复杂的生命活动。',
+    points: ['由多个器官按一定次序组合', '共同完成一种或几种生理功能', '人体八大系统：运动、消化、呼吸、循环、泌尿、神经、内分泌、生殖', '各系统协调配合完成生命活动'],
+    color: '#00695c'
+  },
+  '动物体结构层次': {
+    pinyin: 'dòng wù tǐ jié gòu céng cì', cat: 'hierarchy',
+    def: '动物体的结构层次从微观到宏观依次为：细胞→组织→器官→系统→动物体（人体）。多个细胞形成组织，多种组织构成器官，多个器官组成系统，八大系统构成完整的动物体。',
+    points: ['细胞 → 组织 → 器官 → 系统 → 动物体', '四大基本组织：上皮、结缔、肌肉、神经', '八大系统协调配合', '与植物体相比多了"系统"这一层次'],
+    color: '#c62828'
+  },
+  '植物体结构层次': {
+    pinyin: 'zhí wù tǐ jié gòu céng cì', cat: 'hierarchy',
+    def: '植物体的结构层次从微观到宏观依次为：细胞→组织→器官→植物体。与动物体不同的是，植物体没有"系统"这一层次。',
+    points: ['细胞 → 组织 → 器官 → 植物体', '没有"系统"层次', '六大器官：根、茎、叶（营养器官）、花、果实、种子（生殖器官）', '植物组织：保护、薄壁（营养）、分生、输导等'],
+    color: '#2e7d32'
+  }
+};
+
+var TERM_ORDER = ['细胞','细胞分裂','细胞生长','细胞分化','线粒体','叶绿体',
+  '组织','上皮组织','结缔组织','肌肉组织','神经组织',
+  '保护组织','薄壁组织','分生组织','输导组织',
+  '器官','系统','动物体结构层次','植物体结构层次'];
+
+var TERM_GROUPS = [
+  { label: '细胞基础', terms: ['细胞','细胞分裂','细胞生长','细胞分化'], cat: '' },
+  { label: '细胞器', terms: ['线粒体','叶绿体'], cat: 'cat-organelle' },
+  { label: '动物组织', terms: ['组织','上皮组织','结缔组织','肌肉组织','神经组织'], cat: 'cat-animal' },
+  { label: '植物组织', terms: ['保护组织','薄壁组织','分生组织','输导组织'], cat: 'cat-plant' },
+  { label: '结构层次', terms: ['器官','系统','动物体结构层次','植物体结构层次'], cat: '' }
+];
+
+/* ===== SECTION: utility ===== */
+function hexToRgba(hex, a) {
+  var r = parseInt(hex.slice(1,3),16), g = parseInt(hex.slice(3,5),16), b = parseInt(hex.slice(5,7),16);
+  return 'rgba('+r+','+g+','+b+','+a+')';
+}
+function lerp(a, b, t) { return a + (b - a) * t; }
+function easeInOut(t) { return t < 0.5 ? 2*t*t : -1+(4-2*t)*t; }
+function easeOut(t) { return 1 - Math.pow(1-t, 3); }
+
+/* ===== SECTION: canvas manager ===== */
+var canvas = document.getElementById('animCanvas');
+var ctx = canvas.getContext('2d');
+var W = 0, H = 0, dpr = 1;
+var currentAnim = null;
+var rafId = null;
+
+function resizeCanvas() {
+  var wrap = canvas.parentElement;
+  var rect = wrap.getBoundingClientRect();
+  var w = rect.width - 24;
+  var h = Math.min(w * 0.72, 420);
+  dpr = window.devicePixelRatio || 1;
+  canvas.width = w * dpr;
+  canvas.height = h * dpr;
+  canvas.style.width = w + 'px';
+  canvas.style.height = h + 'px';
+  ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+  W = w; H = h;
+}
+window.addEventListener('resize', function() { resizeCanvas(); });
+
+/* ===== SECTION: base animation ===== */
+function BaseAnim() { this.elapsed = 0; this.phase = ''; }
+BaseAnim.prototype.setup = function() {};
+BaseAnim.prototype.update = function(dt) { this.elapsed += dt; };
+BaseAnim.prototype.draw = function(ctx) {};
+BaseAnim.prototype.getPhase = function() { return this.phase; };
+
+/* ===== SECTION: draw helpers ===== */
+function drawCellBody(cx, cy, rx, ry, color, memColor) {
+  ctx.beginPath(); ctx.ellipse(cx, cy, rx, ry, 0, 0, Math.PI*2);
+  ctx.fillStyle = hexToRgba(color || '#81c784', 0.35); ctx.fill();
+  ctx.beginPath(); ctx.ellipse(cx, cy, rx, ry, 0, 0, Math.PI*2);
+  ctx.strokeStyle = memColor || '#2e7d32'; ctx.lineWidth = 3; ctx.stroke();
+}
+function drawNucleus(x, y, r, color) {
+  ctx.beginPath(); ctx.arc(x, y, r, 0, Math.PI*2);
+  var g = ctx.createRadialGradient(x-r*0.3,y-r*0.3,r*0.1,x,y,r);
+  g.addColorStop(0,'#fff9c4'); g.addColorStop(0.5, color||'#ffc107'); g.addColorStop(1,'#ff8f00');
+  ctx.fillStyle = g; ctx.fill(); ctx.strokeStyle = '#e65100'; ctx.lineWidth = 1.5; ctx.stroke();
+}
+function drawOrganelle(x, y, r, color) {
+  ctx.beginPath(); ctx.arc(x, y, r, 0, Math.PI*2);
+  ctx.fillStyle = hexToRgba(color||'#66bb6a',0.6); ctx.fill();
+}
+function drawChromosomes(x, y, count, size, color) {
+  ctx.strokeStyle = color||'#5d4037'; ctx.lineWidth = 2.5; ctx.lineCap = 'round';
+  for (var i=0;i<count;i++) {
+    var a = (Math.PI*2/count)*i, dx = Math.cos(a)*size*0.5, dy = Math.sin(a)*size*0.5;
+    ctx.beginPath(); ctx.moveTo(x+dx-3,y+dy-4); ctx.quadraticCurveTo(x+dx,y+dy,x+dx+3,y+dy+4);
+    ctx.moveTo(x+dx+3,y+dy-4); ctx.quadraticCurveTo(x+dx,y+dy,x+dx-3,y+dy+4); ctx.stroke();
+  }
+}
+function drawLabel(text, x, y, fontSize, color) {
+  ctx.font = (fontSize||14)+'px -apple-system,"PingFang SC",sans-serif';
+  ctx.fillStyle = color||'#263238'; ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+  ctx.fillText(text, x, y);
+}
+function drawArrow(x1, y1, x2, y2, color) {
+  ctx.strokeStyle = color||'#78909c'; ctx.lineWidth = 2;
+  ctx.beginPath(); ctx.moveTo(x1,y1); ctx.lineTo(x2,y2); ctx.stroke();
+  var a = Math.atan2(y2-y1,x2-x1);
+  ctx.beginPath(); ctx.moveTo(x2,y2);
+  ctx.lineTo(x2-8*Math.cos(a-0.4),y2-8*Math.sin(a-0.4));
+  ctx.lineTo(x2-8*Math.cos(a+0.4),y2-8*Math.sin(a+0.4));
+  ctx.closePath(); ctx.fillStyle = color||'#78909c'; ctx.fill();
+}
+function drawBg() {
+  ctx.fillStyle = '#fafffe'; ctx.fillRect(0,0,W,H);
+  ctx.strokeStyle = 'rgba(0,0,0,0.03)'; ctx.lineWidth = 1;
+  for (var gx=0;gx<W;gx+=30) { ctx.beginPath(); ctx.moveTo(gx,0); ctx.lineTo(gx,H); ctx.stroke(); }
+  for (var gy=0;gy<H;gy+=30) { ctx.beginPath(); ctx.moveTo(0,gy); ctx.lineTo(W,gy); ctx.stroke(); }
+}
+
+/* ===== SECTION: Cell Animation ===== */
+function CellAnim() { BaseAnim.call(this); this.parts = []; }
+CellAnim.prototype = Object.create(BaseAnim.prototype);
+CellAnim.prototype.setup = function() {
+  this.parts = [];
+  for (var i=0;i<8;i++) this.parts.push({angle:Math.random()*Math.PI*2, dist:Math.random()*0.3+0.15, size:Math.random()*6+4, speed:Math.random()*0.3+0.2, color:['#66bb6a','#a5d6a7','#81c784','#4caf50'][Math.floor(Math.random()*4)]});
+};
+CellAnim.prototype.draw = function() {
+  var cx=W/2, cy=H/2, t=this.elapsed, baseRx=Math.min(W,H)*0.28, baseRy=baseRx*0.82;
+  var pulse=1+Math.sin(t*1.5)*0.02, rx=baseRx*pulse, ry=baseRy*pulse;
+  ctx.beginPath(); ctx.ellipse(cx+4,cy+6,rx,ry,0,0,Math.PI*2); ctx.fillStyle='rgba(0,0,0,0.04)'; ctx.fill();
+  drawCellBody(cx,cy,rx,ry,'#81c784','#2e7d32');
+  for (var i=0;i<this.parts.length;i++) { var p=this.parts[i], a=p.angle+t*p.speed; drawOrganelle(cx+Math.cos(a)*rx*p.dist, cy+Math.sin(a)*ry*p.dist, p.size, p.color); }
+  drawNucleus(cx,cy,Math.min(rx,ry)*0.3);
+  var fs=Math.max(12,Math.min(15,W*0.028));
+  drawLabel('细胞膜',cx+rx+30,cy-ry*0.3,fs,'#2e7d32'); drawArrow(cx+rx+18,cy-ry*0.3,cx+rx+3,cy-ry*0.15,'#2e7d32');
+  drawLabel('细胞核',cx,cy+Math.min(rx,ry)*0.3+22,fs,'#e65100');
+  drawLabel('细胞质',cx-rx*0.55,cy-ry*0.55,fs,'#388e3c');
+  drawLabel('🔬 细胞 — 生命的基本单位',cx,22,Math.max(14,fs+1),'#1b5e20');
+  this.phase='';
+};
+
+/* ===== SECTION: Cell Division ===== */
+function DivisionAnim() { BaseAnim.call(this); this.duration=10; }
+DivisionAnim.prototype = Object.create(BaseAnim.prototype);
+DivisionAnim.prototype.setup = function(){ this.elapsed=0; };
+DivisionAnim.prototype.draw = function() {
+  var cx=W/2, cy=H/2, t=(this.elapsed%this.duration)/this.duration, baseR=Math.min(W,H)*0.18;
+  var fs=Math.max(12,Math.min(15,W*0.028));
+  drawLabel('🔬 细胞分裂过程',cx,22,Math.max(14,fs+1),'#1b5e20');
+  if (t<0.2) {
+    drawCellBody(cx,cy,baseR,baseR*0.85,'#81c784','#2e7d32');
+    drawNucleus(cx,cy,baseR*0.3);
+    drawChromosomes(cx,cy,4,baseR*0.15,'#5d4037');
+    if (t/0.2>0.4) { drawChromosomes(cx-8,cy-5,2,baseR*0.1,'#d32f2f'); drawChromosomes(cx+8,cy+5,2,baseR*0.1,'#d32f2f'); }
+    this.phase='① 染色体复制';
+  } else if (t<0.45) {
+    var p=easeInOut((t-0.2)/0.25), rx=baseR*(1+p*0.5), ry=baseR*0.85*(1-p*0.08);
+    drawCellBody(cx,cy,rx,ry,'#81c784','#2e7d32');
+    var sep=p*rx*0.35;
+    drawNucleus(cx-sep,cy,baseR*0.22,'#ffc107'); drawNucleus(cx+sep,cy,baseR*0.22,'#ffc107');
+    this.phase='② 染色体移向两极';
+  } else if (t<0.7) {
+    var p=easeInOut((t-0.45)/0.25), rx=baseR*1.5, ry=baseR*0.85, pinch=p*ry*0.9;
+    ctx.beginPath(); ctx.ellipse(cx-rx*0.28,cy,rx*0.48,ry-pinch*0.15,0,0,Math.PI*2);
+    ctx.fillStyle=hexToRgba('#81c784',0.35); ctx.fill(); ctx.strokeStyle='#2e7d32'; ctx.lineWidth=3; ctx.stroke();
+    ctx.beginPath(); ctx.ellipse(cx+rx*0.28,cy,rx*0.48,ry-pinch*0.15,0,0,Math.PI*2);
+    ctx.fillStyle=hexToRgba('#81c784',0.35); ctx.fill(); ctx.strokeStyle='#2e7d32'; ctx.lineWidth=3; ctx.stroke();
+    ctx.beginPath(); ctx.moveTo(cx,cy-ry+pinch*0.5); ctx.quadraticCurveTo(cx+4,cy,cx,cy+ry-pinch*0.5);
+    ctx.strokeStyle=hexToRgba('#2e7d32',0.4+p*0.6); ctx.lineWidth=2+p*2; ctx.stroke();
+    drawNucleus(cx-rx*0.28,cy,baseR*0.2); drawNucleus(cx+rx*0.28,cy,baseR*0.2);
+    this.phase='③ 细胞膜凹陷缢裂';
+  } else {
+    var p=easeOut(Math.min(1,(t-0.7)/0.3)), gap=baseR*0.15+p*baseR*0.35, cr=baseR*0.78, cry=cr*0.85;
+    ctx.globalAlpha=0.5+p*0.5;
+    drawCellBody(cx-gap-cr*0.5,cy,cr,cry,'#81c784','#2e7d32');
+    drawNucleus(cx-gap-cr*0.5,cy,cr*0.28);
+    drawCellBody(cx+gap+cr*0.5,cy,cr,cry,'#81c784','#2e7d32');
+    drawNucleus(cx+gap+cr*0.5,cy,cr*0.28);
+    ctx.globalAlpha=1;
+    drawLabel('两个新细胞',cx,cy+cry+28,fs,'#1565c0');
+    this.phase='④ 形成两个子细胞';
+  }
+};
+
+/* ===== SECTION: Cell Growth ===== */
+function GrowthAnim() { BaseAnim.call(this); this.duration=8; this.particles=[]; }
+GrowthAnim.prototype = Object.create(BaseAnim.prototype);
+GrowthAnim.prototype.setup = function() {
+  this.elapsed=0; this.particles=[];
+  for(var i=0;i<15;i++) this.particles.push({angle:Math.random()*Math.PI*2, dist:0.9+Math.random()*0.3, speed:0.3+Math.random()*0.4, size:3+Math.random()*4, color:['#ffcc80','#a5d6a7','#90caf9','#ce93d8'][Math.floor(Math.random()*4)]});
+};
+GrowthAnim.prototype.draw = function() {
+  var cx=W/2, cy=H/2, t=(this.elapsed%this.duration)/this.duration, fs=Math.max(12,Math.min(15,W*0.028));
+  var maxR=Math.min(W,H)*0.28;
+  drawLabel('🔬 细胞生长过程',cx,22,Math.max(14,fs+1),'#1b5e20');
+  var growP=easeInOut(Math.min(1,t*1.5)), rx=maxR*(0.4+growP*0.6), ry=rx*0.85;
+  if(t<0.7) for(var i=0;i<this.particles.length;i++){
+    var p=this.particles[i], pd=Math.max(0.15,p.dist-t*p.speed*0.8);
+    var px=cx+Math.cos(p.angle+this.elapsed*0.3)*rx*pd*1.8, py=cy+Math.sin(p.angle+this.elapsed*0.3)*ry*pd*1.8;
+    ctx.globalAlpha=Math.max(0,1-(1-pd)*2); drawOrganelle(px,py,p.size,p.color); ctx.globalAlpha=1;
+  }
+  drawCellBody(cx,cy,rx,ry,'#81c784','#2e7d32');
+  if(t>0.3){var vp=easeInOut(Math.min(1,(t-0.3)/0.5)),vr=rx*0.18*vp;
+    ctx.beginPath();ctx.arc(cx+rx*0.15,cy-ry*0.1,vr,0,Math.PI*2);ctx.fillStyle=hexToRgba('#90caf9',0.4+vp*0.3);ctx.fill();ctx.strokeStyle='#42a5f5';ctx.lineWidth=1.5;ctx.stroke();
+    if(vp>0.5)drawLabel('液泡',cx+rx*0.15,cy-ry*0.1,fs*0.85,'#1565c0');
+  }
+  drawNucleus(cx-rx*0.15,cy+ry*0.05,Math.min(rx,ry)*0.22);
+  if(growP>0.1){ctx.beginPath();ctx.ellipse(cx,cy,maxR*0.4,maxR*0.34,0,0,Math.PI*2);ctx.strokeStyle=hexToRgba('#78909c',0.25);ctx.lineWidth=1;ctx.setLineDash([4,4]);ctx.stroke();ctx.setLineDash([]);}
+  this.phase=t<0.5?'吸收营养物质，体积增大':'液泡合并变大，细胞成熟';
+};
+
+/* ===== SECTION: Cell Differentiation ===== */
+function DiffAnim() { BaseAnim.call(this); this.duration=10; }
+DiffAnim.prototype = Object.create(BaseAnim.prototype);
+DiffAnim.prototype.setup = function(){ this.elapsed=0; };
+DiffAnim.prototype.draw = function() {
+  var cx=W/2, cy=H/2, t=(this.elapsed%this.duration)/this.duration, fs=Math.max(12,Math.min(15,W*0.028));
+  var cellR=Math.min(W,H)*0.07;
+  drawLabel('🔬 细胞分化',cx,22,Math.max(14,fs+1),'#1b5e20');
+  if(t<0.35){
+    var pulse=1+Math.sin(this.elapsed*3)*0.04;
+    drawCellBody(cx,cy,cellR*pulse,cellR*pulse,'#b39ddb','#5e35b1');
+    drawNucleus(cx,cy,cellR*0.3); drawLabel('干细胞',cx,cy+cellR+18,fs,'#5e35b1');
+    this.phase='未分化的干细胞';
+  } else {
+    var p=Math.min(1,(t-0.35)/0.55), ep=easeOut(p);
+    var ca=Math.max(0,1-ep*2);
+    if(ca>0){ctx.globalAlpha=ca;drawCellBody(cx,cy,cellR,cellR,'#b39ddb','#5e35b1');drawNucleus(cx,cy,cellR*0.3);ctx.globalAlpha=1;}
+    var tgts=[
+      {x:cx-W*0.28,y:cy-H*0.2,l:'神经细胞',fn:this.drawNerve},
+      {x:cx+W*0.28,y:cy-H*0.2,l:'肌肉细胞',fn:this.drawMuscle},
+      {x:cx-W*0.28,y:cy+H*0.2,l:'红细胞',fn:this.drawRBC},
+      {x:cx+W*0.28,y:cy+H*0.2,l:'上皮细胞',fn:this.drawEpi}
+    ];
+    for(var i=0;i<tgts.length;i++){
+      var tg=tgts[i],dx=tg.x-cx,dy=tg.y-cy,d=Math.sqrt(dx*dx+dy*dy);
+      var arrP=Math.min(1,ep*1.5);
+      if(arrP>0.1) drawArrow(cx+dx/d*cellR*1.5,cy+dy/d*cellR*1.5,cx+dx/d*d*arrP*0.6,cy+dy/d*d*arrP*0.6,'#b0bec5');
+    }
+    for(var i=0;i<tgts.length;i++){
+      var cp=Math.min(1,Math.max(0,(ep-0.1*i)/0.6));
+      if(cp>0){ctx.globalAlpha=cp;tgts[i].fn(cx||ctx,tgts[i].x,tgts[i].y,cellR*1.2,this.elapsed);drawLabel(tgts[i].l,tgts[i].x,tgts[i].y+cellR*1.8,fs,'#37474f');ctx.globalAlpha=1;}
+    }
+    this.phase='分化形成不同类型的细胞';
+  }
+};
+DiffAnim.prototype.drawNerve=function(_ctx,x,y,r,t){
+  ctx.beginPath();ctx.arc(x,y,r*0.6,0,Math.PI*2);ctx.fillStyle=hexToRgba('#7e57c2',0.5);ctx.fill();ctx.strokeStyle='#4527a0';ctx.lineWidth=2;ctx.stroke();
+  drawNucleus(x,y,r*0.22);ctx.strokeStyle='#7e57c2';ctx.lineWidth=2;
+  for(var i=0;i<5;i++){var a=(Math.PI*2/5)*i+Math.sin(t+i)*0.15,len=r*(1.2+Math.sin(t*2+i)*0.15);ctx.beginPath();ctx.moveTo(x,y);ctx.lineTo(x+Math.cos(a)*len,y+Math.sin(a)*len);ctx.stroke();ctx.beginPath();ctx.arc(x+Math.cos(a)*len,y+Math.sin(a)*len,2.5,0,Math.PI*2);ctx.fillStyle='#7e57c2';ctx.fill();}
+};
+DiffAnim.prototype.drawMuscle=function(_ctx,x,y,r,t){
+  var s=1+Math.sin(t*2)*0.1;ctx.beginPath();ctx.ellipse(x,y,r*1.4*s,r*0.45,0,0,Math.PI*2);ctx.fillStyle=hexToRgba('#ef5350',0.4);ctx.fill();ctx.strokeStyle='#c62828';ctx.lineWidth=2;ctx.stroke();
+  ctx.strokeStyle=hexToRgba('#c62828',0.3);ctx.lineWidth=1;
+  for(var i=-3;i<=3;i++){var lx=x+i*r*0.3;ctx.beginPath();ctx.moveTo(lx,y-r*0.35);ctx.lineTo(lx,y+r*0.35);ctx.stroke();}
+  drawNucleus(x,y,r*0.18,'#e53935');
+};
+DiffAnim.prototype.drawRBC=function(_ctx,x,y,r,t){
+  var w=Math.sin(t*1.5)*2;ctx.beginPath();ctx.ellipse(x,y+w,r*0.9,r*0.55,0,0,Math.PI*2);ctx.fillStyle=hexToRgba('#e53935',0.5);ctx.fill();ctx.strokeStyle='#b71c1c';ctx.lineWidth=2;ctx.stroke();
+  ctx.beginPath();ctx.ellipse(x,y+w,r*0.35,r*0.2,0,0,Math.PI*2);ctx.fillStyle=hexToRgba('#e53935',0.25);ctx.fill();
+};
+DiffAnim.prototype.drawEpi=function(_ctx,x,y,r){
+  ctx.beginPath();ctx.moveTo(x-r,y-r*0.4);ctx.lineTo(x+r,y-r*0.4);ctx.lineTo(x+r*0.85,y+r*0.4);ctx.lineTo(x-r*0.85,y+r*0.4);ctx.closePath();
+  ctx.fillStyle=hexToRgba('#42a5f5',0.35);ctx.fill();ctx.strokeStyle='#1565c0';ctx.lineWidth=2;ctx.stroke();drawNucleus(x,y,r*0.2,'#1565c0');
+};
+
+/* ===== SECTION: Mitochondria Animation ===== */
+function MitoAnim() { BaseAnim.call(this); this.duration=8; this.electrons=[]; }
+MitoAnim.prototype = Object.create(BaseAnim.prototype);
+MitoAnim.prototype.setup = function() {
+  this.elapsed=0; this.electrons=[];
+  for(var i=0;i<6;i++) this.electrons.push({pos:Math.random(), speed:0.15+Math.random()*0.2, size:4+Math.random()*3});
+};
+MitoAnim.prototype.draw = function() {
+  var cx=W/2, cy=H/2, t=this.elapsed, fs=Math.max(12,Math.min(15,W*0.028));
+  var rx=Math.min(W,H)*0.32, ry=rx*0.48;
+  drawLabel('🔬 线粒体 — 细胞的"动力车间"',cx,22,Math.max(14,fs+1),'#4a148c');
+
+  // outer membrane
+  ctx.beginPath(); ctx.ellipse(cx,cy,rx,ry,0,0,Math.PI*2);
+  ctx.fillStyle=hexToRgba('#ce93d8',0.2); ctx.fill();
+  ctx.strokeStyle='#7b1fa2'; ctx.lineWidth=3; ctx.stroke();
+
+  // inner membrane with cristae (folds)
+  var numCristae=5;
+  for(var i=0;i<numCristae;i++){
+    var xp=cx-rx*0.7+i*(rx*1.4/(numCristae-1));
+    var cristaeH=ry*(0.5+Math.sin(t*1.5+i*1.2)*0.1);
+    var wobble=Math.sin(t*2+i)*3;
+    ctx.beginPath();
+    ctx.moveTo(xp,cy-ry*0.85);
+    ctx.quadraticCurveTo(xp-12+wobble,cy,xp,cy+cristaeH);
+    ctx.strokeStyle=hexToRgba('#7b1fa2',0.6); ctx.lineWidth=2.5; ctx.stroke();
+    ctx.beginPath();
+    ctx.moveTo(xp,cy-ry*0.85);
+    ctx.quadraticCurveTo(xp+12+wobble,cy,xp,cy+cristaeH*0.8);
+    ctx.strokeStyle=hexToRgba('#7b1fa2',0.4); ctx.lineWidth=2; ctx.stroke();
+  }
+
+  // inner membrane outline
+  ctx.beginPath(); ctx.ellipse(cx,cy,rx*0.85,ry*0.85,0,0,Math.PI*2);
+  ctx.strokeStyle=hexToRgba('#7b1fa2',0.35); ctx.lineWidth=2; ctx.setLineDash([4,3]); ctx.stroke(); ctx.setLineDash([]);
+
+  // DNA (small circle)
+  ctx.beginPath(); ctx.arc(cx+rx*0.2,cy-ry*0.2,5,0,Math.PI*2);
+  ctx.fillStyle='#e1bee7'; ctx.fill(); ctx.strokeStyle='#4a148c'; ctx.lineWidth=1; ctx.stroke();
+  drawLabel('DNA',cx+rx*0.2,cy-ry*0.2-12,fs*0.8,'#4a148c');
+
+  // energy particles (ATP) flowing
+  for(var i=0;i<this.electrons.length;i++){
+    var e=this.electrons[i];
+    e.pos=(e.pos+0.003*e.speed)%1;
+    var angle=e.pos*Math.PI*2;
+    var ex=cx+Math.cos(angle)*rx*0.6, ey=cy+Math.sin(angle)*ry*0.6;
+    ctx.beginPath(); ctx.arc(ex,ey,e.size,0,Math.PI*2);
+    ctx.fillStyle=hexToRgba('#ffab00',0.7+Math.sin(t*3+i)*0.3); ctx.fill();
+    ctx.shadowColor='#ffab00'; ctx.shadowBlur=6;
+    ctx.beginPath(); ctx.arc(ex,ey,e.size,0,Math.PI*2); ctx.fill();
+    ctx.shadowBlur=0;
+    if(e.size>5) drawLabel('ATP',ex,ey-e.size-6,fs*0.7,'#ff6f00');
+  }
+
+  // reaction equation
+  if(Math.sin(t*0.8)>0){
+    drawLabel('有机物 + O₂ → CO₂ + H₂O + 能量(ATP)',cx,cy+ry+28,fs,'#4a148c');
+  }
+
+  // labels
+  drawLabel('外膜',cx+rx+20,cy-ry*0.5,fs,'#7b1fa2'); drawArrow(cx+rx+8,cy-ry*0.5,cx+rx+2,cy-ry*0.3,'#7b1fa2');
+  drawLabel('内膜(嵴)',cx-rx-30,cy,fs,'#7b1fa2'); drawArrow(cx-rx-18,cy,cx-rx*0.6,cy,'#7b1fa2');
+  drawLabel('基质',cx,cy+ry*0.5+5,fs,'#4a148c');
+
+  this.phase='线粒体不断产生ATP能量';
+};
+
+/* ===== SECTION: Chloroplast Animation ===== */
+function ChloroAnim() { BaseAnim.call(this); this.duration=10; this.lightRays=[]; this.o2Bubbles=[]; }
+ChloroAnim.prototype = Object.create(BaseAnim.prototype);
+ChloroAnim.prototype.setup = function() {
+  this.elapsed=0; this.lightRays=[]; this.o2Bubbles=[];
+  for(var i=0;i<5;i++) this.lightRays.push({x:0.15+i*0.18, speed:0.3+Math.random()*0.2, phase:Math.random()*Math.PI*2});
+  for(var i=0;i<4;i++) this.o2Bubbles.push({x:Math.random()*0.6+0.2, y:0, speed:0.2+Math.random()*0.15, size:4+Math.random()*4});
+};
+ChloroAnim.prototype.draw = function() {
+  var cx=W/2, cy=H/2, t=this.elapsed, fs=Math.max(12,Math.min(15,W*0.028));
+  var rx=Math.min(W,H)*0.32, ry=rx*0.5;
+  drawLabel('🔬 叶绿体 — 细胞的"能量转换站"',cx,22,Math.max(14,fs+1),'#1b5e20');
+
+  // light rays coming from top
+  for(var i=0;i<this.lightRays.length;i++){
+    var lr=this.lightRays[i];
+    var lx=W*lr.x, alpha=0.3+Math.sin(t*lr.speed+lr.phase)*0.2;
+    ctx.beginPath(); ctx.moveTo(lx,0); ctx.lineTo(lx+8,cy-ry-5);
+    ctx.strokeStyle=hexToRgba('#fdd835',alpha); ctx.lineWidth=3; ctx.stroke();
+    // arrow head
+    ctx.beginPath(); ctx.moveTo(lx+8,cy-ry-5); ctx.lineTo(lx+4,cy-ry-15); ctx.lineTo(lx+12,cy-ry-15);
+    ctx.closePath(); ctx.fillStyle=hexToRgba('#fdd835',alpha); ctx.fill();
+  }
+  drawLabel('☀️ 光能',W*0.15,28,fs,'#f9a825');
+
+  // outer membrane
+  ctx.beginPath(); ctx.ellipse(cx,cy,rx,ry,0,0,Math.PI*2);
+  ctx.fillStyle=hexToRgba('#a5d6a7',0.3); ctx.fill();
+  ctx.strokeStyle='#2e7d32'; ctx.lineWidth=3; ctx.stroke();
+
+  // thylakoid stacks (grana)
+  var numGrana=4;
+  for(var i=0;i<numGrana;i++){
+    var gx=cx-rx*0.6+i*(rx*1.2/(numGrana-1));
+    var stackCount=4;
+    for(var j=0;j<stackCount;j++){
+      var gy=cy-ry*0.25+j*ry*0.18;
+      var wobble=Math.sin(t*1.5+i+j)*2;
+      ctx.beginPath(); ctx.ellipse(gx+wobble,gy,rx*0.12,ry*0.07,0,0,Math.PI*2);
+      ctx.fillStyle=hexToRgba('#2e7d32',0.5+Math.sin(t+i+j)*0.15); ctx.fill();
+      ctx.strokeStyle='#1b5e20'; ctx.lineWidth=1; ctx.stroke();
+    }
+    // connecting lamellae
+    if(i<numGrana-1){
+      var nx=cx-rx*0.6+(i+1)*(rx*1.2/(numGrana-1));
+      ctx.beginPath(); ctx.moveTo(gx+rx*0.12,cy); ctx.lineTo(nx-rx*0.12,cy);
+      ctx.strokeStyle=hexToRgba('#2e7d32',0.4); ctx.lineWidth=2; ctx.stroke();
+    }
+  }
+
+  // O2 bubbles rising
+  for(var i=0;i<this.o2Bubbles.length;i++){
+    var b=this.o2Bubbles[i];
+    b.y=(b.y+0.002*b.speed)%1;
+    var bx=cx-rx*0.3+b.x*rx*0.6, by=cy-ry-b.y*H*0.3;
+    ctx.globalAlpha=1-b.y;
+    ctx.beginPath(); ctx.arc(bx,by,b.size,0,Math.PI*2);
+    ctx.fillStyle=hexToRgba('#e3f2fd',0.7); ctx.fill();
+    ctx.strokeStyle='#90caf9'; ctx.lineWidth=1; ctx.stroke();
+    drawLabel('O₂',bx,by,fs*0.6,'#1565c0');
+    ctx.globalAlpha=1;
+  }
+
+  // stroma label
+  drawLabel('基质(暗反应)',cx,cy+ry*0.55,fs,'#1b5e20');
+  drawLabel('类囊体(光反应)',cx-rx*0.35,cy-ry*0.4,fs*0.85,'#1b5e20');
+  drawArrow(cx-rx*0.35,cy-ry*0.4+8,cx-rx*0.35,cy-ry*0.25,'#1b5e20');
+
+  // equation
+  drawLabel('CO₂ + H₂O → 有机物 + O₂',cx,cy+ry+28,fs,'#1b5e20');
+
+  // membrane labels
+  drawLabel('外膜',cx+rx+18,cy-ry*0.3,fs,'#2e7d32'); drawArrow(cx+rx+6,cy-ry*0.3,cx+rx+2,cy-ry*0.15,'#2e7d32');
+
+  this.phase='光能转化为化学能，储存在有机物中';
+};
+
+/* ===== SECTION: Tissue Animation ===== */
+function TissueAnim() { BaseAnim.call(this); this.duration=8; }
+TissueAnim.prototype = Object.create(BaseAnim.prototype);
+TissueAnim.prototype.setup = function(){ this.elapsed=0; };
+TissueAnim.prototype.draw = function() {
+  var cx=W/2, cy=H/2, t=(this.elapsed%this.duration)/this.duration, fs=Math.max(12,Math.min(15,W*0.028));
+  var cellR=Math.min(W,H)*0.045;
+  drawLabel('🔬 组织 — 形态相似的细胞群',cx,22,Math.max(14,fs+1),'#1b5e20');
+  var rows=4, cols=6, spacing=cellR*2.6, startX=cx-(cols-1)*spacing/2, startY=cy-(rows-1)*spacing/2;
+  var op=easeInOut(Math.min(1,t*2));
+  for(var r=0;r<rows;r++) for(var c=0;c<cols;c++){
+    var tx=startX+c*spacing, ty=startY+r*spacing;
+    var rx=tx+(1-op)*Math.sin(r*3.7+c*5.1)*W*0.3, ry=ty+(1-op)*Math.cos(r*2.3+c*7.3)*H*0.3;
+    var fx=lerp(rx,tx,op), fy=lerp(ry,ty,op);
+    ctx.beginPath();ctx.arc(fx,fy,cellR,0,Math.PI*2);ctx.fillStyle=hexToRgba('#ef9a9a',0.5);ctx.fill();ctx.strokeStyle='#c62828';ctx.lineWidth=1.5;ctx.stroke();
+    ctx.beginPath();ctx.arc(fx,fy,cellR*0.35,0,Math.PI*2);ctx.fillStyle='#e57373';ctx.fill();
+  }
+  if(op>0.8){var bw=(cols-1)*spacing+cellR*3, bh=(rows-1)*spacing+cellR*3;
+    ctx.strokeStyle='#c62828';ctx.lineWidth=2;ctx.strokeRect(cx-bw/2,cy-bh/2,bw,bh);
+    drawLabel('组织 = 许多相似的细胞联合',cx,cy+bh/2+22,fs,'#c62828');
+  }
+  this.phase=op<0.5?'细胞逐渐聚集…':'排列形成组织';
+};
+
+/* ===== SECTION: Epithelial Tissue ===== */
+function EpiTissueAnim() { BaseAnim.call(this); this.duration=7; }
+EpiTissueAnim.prototype = Object.create(BaseAnim.prototype);
+EpiTissueAnim.prototype.setup = function(){ this.elapsed=0; };
+EpiTissueAnim.prototype.draw = function() {
+  var cx=W/2, cy=H/2, t=(this.elapsed%this.duration)/this.duration, fs=Math.max(12,Math.min(15,W*0.028));
+  drawLabel('🔬 上皮组织',cx,22,Math.max(14,fs+1),'#e65100');
+
+  var rows=3, cols=7;
+  var cellW=Math.min(W*0.12, 50), cellH=cellW*0.5;
+  var totalW=cols*cellW*1.02, startX=cx-totalW/2, startY=cy-rows*cellH*1.02/2;
+  var fillP=easeInOut(Math.min(1,t*2));
+
+  // base membrane
+  ctx.beginPath();
+  ctx.moveTo(startX-10,startY+rows*cellH*1.02+5);
+  ctx.lineTo(startX+totalW+10,startY+rows*cellH*1.02+5);
+  ctx.strokeStyle='#795548'; ctx.lineWidth=3; ctx.stroke();
+  drawLabel('基膜',cx,startY+rows*cellH*1.02+22,fs,'#795548');
+
+  var idx=0;
+  for(var r=0;r<rows;r++) for(var c=0;c<cols;c++){
+    var ratio=idx/(rows*cols);
+    var cellP=Math.max(0,Math.min(1,(fillP-ratio*0.6)/0.4));
+    if(cellP<=0){idx++;continue;}
+    ctx.globalAlpha=cellP;
+    var x=startX+c*cellW*1.02, y=startY+r*cellH*1.02;
+    // tile-like cell
+    ctx.beginPath();
+    ctx.moveTo(x+3,y); ctx.lineTo(x+cellW-3,y);
+    ctx.quadraticCurveTo(x+cellW,y,x+cellW,y+3);
+    ctx.lineTo(x+cellW,y+cellH-3);
+    ctx.quadraticCurveTo(x+cellW,y+cellH,x+cellW-3,y+cellH);
+    ctx.lineTo(x+3,y+cellH);
+    ctx.quadraticCurveTo(x,y+cellH,x,y+cellH-3);
+    ctx.lineTo(x,y+3);
+    ctx.quadraticCurveTo(x,y,x+3,y);
+    ctx.closePath();
+    ctx.fillStyle=hexToRgba('#ffcc80',0.5); ctx.fill();
+    ctx.strokeStyle='#e65100'; ctx.lineWidth=1.5; ctx.stroke();
+    // nucleus
+    ctx.beginPath(); ctx.ellipse(x+cellW/2,y+cellH/2,cellW*0.15,cellH*0.2,0,0,Math.PI*2);
+    ctx.fillStyle='#e65100'; ctx.fill();
+    ctx.globalAlpha=1;
+    idx++;
+  }
+
+  // protection arrows bouncing off top
+  if(fillP>0.7){
+    var arrP=Math.min(1,(fillP-0.7)/0.3);
+    ctx.globalAlpha=arrP;
+    for(var i=0;i<3;i++){
+      var ax=startX+totalW*0.25+i*totalW*0.25;
+      drawArrow(ax,startY-30,ax,startY-5,'#f44336');
+    }
+    drawLabel('🛡️ 保护屏障',cx,startY-42,fs,'#c62828');
+    ctx.globalAlpha=1;
+  }
+
+  drawLabel('细胞排列紧密 · 保护、分泌功能',cx,cy+rows*cellH+40,fs,'#e65100');
+  this.phase=fillP<0.5?'上皮细胞逐层排列…':'形成致密的保护层';
+};
+
+/* ===== SECTION: Connective Tissue ===== */
+function ConnTissueAnim() { BaseAnim.call(this); this.duration=8; this.cells=[]; }
+ConnTissueAnim.prototype = Object.create(BaseAnim.prototype);
+ConnTissueAnim.prototype.setup = function() {
+  this.elapsed=0; this.cells=[];
+  for(var i=0;i<12;i++) this.cells.push({x:Math.random()*0.8+0.1, y:Math.random()*0.7+0.15, type:Math.floor(Math.random()*3), size:6+Math.random()*8, color:['#90caf9','#ce93d8','#a5d6a7'][Math.floor(Math.random()*3)]});
+};
+ConnTissueAnim.prototype.draw = function() {
+  var cx=W/2, cy=H/2, t=this.elapsed, fs=Math.max(12,Math.min(15,W*0.028));
+  drawLabel('🔬 结缔组织',cx,22,Math.max(14,fs+1),'#0277bd');
+
+  // abundant extracellular matrix (fibers)
+  var fillP=easeInOut(Math.min(1,(t%this.duration)/this.duration*2));
+  ctx.strokeStyle=hexToRgba('#90caf9',0.3+fillP*0.3); ctx.lineWidth=1.5;
+  for(var i=0;i<20;i++){
+    var x1=W*0.1+Math.sin(i*2.3)*W*0.35, y1=H*0.15+Math.cos(i*3.1)*H*0.3;
+    var x2=x1+Math.cos(i*1.7)*W*0.2, y2=y1+Math.sin(i*2.1)*H*0.2;
+    ctx.globalAlpha=fillP;
+    ctx.beginPath(); ctx.moveTo(x1,y1); ctx.quadraticCurveTo(cx+Math.sin(i)*30,cy+Math.cos(i)*20,x2,y2); ctx.stroke();
+  }
+  ctx.globalAlpha=1;
+
+  // scattered cells
+  for(var i=0;i<this.cells.length;i++){
+    var c=this.cells[i];
+    var cAlpha=Math.max(0,Math.min(1,(fillP-i*0.04)/0.5));
+    if(cAlpha<=0) continue;
+    ctx.globalAlpha=cAlpha;
+    var px=c.x*W, py=c.y*H+Math.sin(t+i)*3;
+    if(c.type===0){
+      // round cell (blood)
+      ctx.beginPath(); ctx.arc(px,py,c.size,0,Math.PI*2); ctx.fillStyle=c.color; ctx.fill(); ctx.strokeStyle='#0277bd'; ctx.lineWidth=1; ctx.stroke();
+    } else if(c.type===1){
+      // star-shaped (fibroblast)
+      ctx.beginPath(); ctx.arc(px,py,c.size*0.5,0,Math.PI*2); ctx.fillStyle=c.color; ctx.fill();
+      for(var j=0;j<5;j++){var a=Math.PI*2/5*j+t*0.3;ctx.beginPath();ctx.moveTo(px,py);ctx.lineTo(px+Math.cos(a)*c.size,py+Math.sin(a)*c.size);ctx.strokeStyle=c.color;ctx.lineWidth=1.5;ctx.stroke();}
+    } else {
+      // flat cell
+      ctx.beginPath(); ctx.ellipse(px,py,c.size*1.2,c.size*0.5,Math.sin(t+i)*0.3,0,Math.PI*2); ctx.fillStyle=c.color; ctx.fill(); ctx.strokeStyle='#0277bd'; ctx.lineWidth=1; ctx.stroke();
+    }
+    ctx.globalAlpha=1;
+  }
+
+  // examples
+  var examples=['骨组织','血液','脂肪','韧带'];
+  var exY=H*0.85;
+  for(var i=0;i<examples.length;i++){
+    var exX=cx-W*0.3+i*(W*0.6/3);
+    ctx.globalAlpha=fillP;
+    ctx.beginPath(); ctx.arc(exX,exY,14,0,Math.PI*2);
+    ctx.fillStyle=['#795548','#e53935','#fff176','#8d6e63'][i]; ctx.fill();
+    drawLabel(examples[i],exX,exY+22,fs*0.85,'#37474f');
+    ctx.globalAlpha=1;
+  }
+
+  drawLabel('细胞间质发达 · 支持、连接、营养',cx,cy-H*0.42,fs,'#0277bd');
+  this.phase='种类多样的细胞 + 丰富的细胞间质';
+};
+
+/* ===== SECTION: Muscle Tissue ===== */
+function MuscleTissueAnim() { BaseAnim.call(this); this.duration=6; }
+MuscleTissueAnim.prototype = Object.create(BaseAnim.prototype);
+MuscleTissueAnim.prototype.setup = function(){ this.elapsed=0; };
+MuscleTissueAnim.prototype.draw = function() {
+  var cx=W/2, cy=H/2, t=this.elapsed, fs=Math.max(12,Math.min(15,W*0.028));
+  var period=this.duration;
+  var tp=(t%period)/period;
+  drawLabel('🔬 肌肉组织',cx,22,Math.max(14,fs+1),'#c62828');
+
+  // contraction cycle
+  var contractP=Math.sin(tp*Math.PI*2)*0.5+0.5; // 0=relaxed, 1=contracted
+  var baseW=Math.min(W,H)*0.35, baseH=Math.min(W,H)*0.08;
+  var curW=baseW*(1-contractP*0.3), curH=baseH*(1+contractP*0.4);
+
+  // three muscle fibers
+  for(var i=0;i<3;i++){
+    var fy=cy-H*0.15+i*(curH*1.8+8);
+    // fiber
+    ctx.beginPath(); ctx.ellipse(cx,fy,curW,curH,0,0,Math.PI*2);
+    ctx.fillStyle=hexToRgba('#ef9a9a',0.45); ctx.fill();
+    ctx.strokeStyle='#c62828'; ctx.lineWidth=2; ctx.stroke();
+    // striations
+    ctx.strokeStyle=hexToRgba('#c62828',0.25); ctx.lineWidth=1;
+    var numStr=Math.floor(curW*2/12);
+    for(var j=-numStr;j<=numStr;j++){
+      var sx=cx+j*6;
+      ctx.beginPath(); ctx.moveTo(sx,fy-curH*0.7); ctx.lineTo(sx,fy+curH*0.7); ctx.stroke();
+    }
+    // nuclei
+    for(var n=-1;n<=1;n++) {
+      ctx.beginPath(); ctx.ellipse(cx+n*curW*0.4,fy,curW*0.04,curH*0.25,0,0,Math.PI*2);
+      ctx.fillStyle='#b71c1c'; ctx.fill();
+    }
+  }
+
+  // contraction arrows
+  if(contractP>0.3){
+    ctx.globalAlpha=contractP;
+    drawArrow(cx-curW-20,cy-10,cx-curW+5,cy-10,'#d32f2f');
+    drawArrow(cx+curW+20,cy-10,cx+curW-5,cy-10,'#d32f2f');
+    drawLabel('收缩!',cx,cy-curH*2.5-15,fs+2,'#d32f2f');
+    ctx.globalAlpha=1;
+  }
+
+  drawLabel(contractP>0.5?'舒张':'收缩',cx,cy+H*0.35,fs+1,'#c62828');
+  drawLabel('骨骼肌 · 平滑肌 · 心肌',cx,cy+H*0.42,fs*0.9,'#78909c');
+  this.phase=contractP>0.5?'肌肉收缩':'肌肉舒张';
+};
+
+/* ===== SECTION: Nervous Tissue ===== */
+function NerveTissueAnim() { BaseAnim.call(this); this.duration=6; this.signals=[]; }
+NerveTissueAnim.prototype = Object.create(BaseAnim.prototype);
+NerveTissueAnim.prototype.setup = function() {
+  this.elapsed=0; this.signals=[];
+};
+NerveTissueAnim.prototype.draw = function() {
+  var cx=W/2, cy=H/2, t=this.elapsed, fs=Math.max(12,Math.min(15,W*0.028));
+  drawLabel('🔬 神经组织',cx,22,Math.max(14,fs+1),'#4a148c');
+
+  // Draw a large neuron
+  var bodyR=Math.min(W,H)*0.08;
+  // cell body
+  ctx.beginPath(); ctx.arc(cx,cy,bodyR,0,Math.PI*2);
+  ctx.fillStyle=hexToRgba('#b39ddb',0.5); ctx.fill();
+  ctx.strokeStyle='#4a148c'; ctx.lineWidth=2.5; ctx.stroke();
+  drawNucleus(cx,cy,bodyR*0.35,'#7b1fa2');
+
+  // dendrites (short branches)
+  var dendriteCount=6;
+  for(var i=0;i<dendriteCount;i++){
+    var angle=(Math.PI*2/dendriteCount)*i+Math.sin(t*0.5+i)*0.1;
+    var len=bodyR*2+Math.sin(t+i)*5;
+    var ex=cx+Math.cos(angle)*len, ey=cy+Math.sin(angle)*len;
+    ctx.beginPath(); ctx.moveTo(cx+Math.cos(angle)*bodyR,cy+Math.sin(angle)*bodyR);
+    // branching
+    var mx=cx+Math.cos(angle)*len*0.5+Math.sin(t+i)*8;
+    var my=cy+Math.sin(angle)*len*0.5+Math.cos(t+i)*8;
+    ctx.quadraticCurveTo(mx,my,ex,ey);
+    ctx.strokeStyle='#7e57c2'; ctx.lineWidth=2.5; ctx.stroke();
+    // small branches
+    for(var b=0;b<2;b++){
+      var bp=0.4+b*0.3;
+      var bx=cx+Math.cos(angle)*len*bp, by=cy+Math.sin(angle)*len*bp;
+      var ba=angle+(b===0?0.5:-0.5);
+      ctx.beginPath(); ctx.moveTo(bx,by); ctx.lineTo(bx+Math.cos(ba)*12,by+Math.sin(ba)*12);
+      ctx.strokeStyle=hexToRgba('#7e57c2',0.6); ctx.lineWidth=1.5; ctx.stroke();
+    }
+    ctx.beginPath(); ctx.arc(ex,ey,3,0,Math.PI*2); ctx.fillStyle='#7e57c2'; ctx.fill();
+  }
+
+  // axon (long, going down-right)
+  var axonLen=W*0.3;
+  var axonAngle=Math.PI*0.3;
+  var ax=cx+Math.cos(axonAngle)*bodyR, ay=cy+Math.sin(axonAngle)*bodyR;
+  var aex=cx+Math.cos(axonAngle)*axonLen, aey=cy+Math.sin(axonAngle)*axonLen;
+
+  // myelin sheaths
+  var sheathCount=5;
+  for(var i=0;i<sheathCount;i++){
+    var sp=(i+0.5)/sheathCount;
+    var sx=lerp(ax,aex,sp), sy=lerp(ay,aey,sp);
+    ctx.beginPath(); ctx.ellipse(sx,sy,10,6,axonAngle,0,Math.PI*2);
+    ctx.fillStyle=hexToRgba('#fff9c4',0.6); ctx.fill();
+    ctx.strokeStyle='#f9a825'; ctx.lineWidth=1; ctx.stroke();
+  }
+
+  ctx.beginPath(); ctx.moveTo(ax,ay); ctx.lineTo(aex,aey);
+  ctx.strokeStyle='#4a148c'; ctx.lineWidth=3; ctx.stroke();
+  drawLabel('轴突',lerp(ax,aex,0.5)-20,lerp(ay,aey,0.5)-15,fs,'#4a148c');
+
+  // axon terminal
+  for(var i=0;i<3;i++){
+    var ta=axonAngle+(i-1)*0.4;
+    var tex=aex+Math.cos(ta)*15, tey=aey+Math.sin(ta)*15;
+    ctx.beginPath(); ctx.moveTo(aex,aey); ctx.lineTo(tex,tey);
+    ctx.strokeStyle='#4a148c'; ctx.lineWidth=2; ctx.stroke();
+    ctx.beginPath(); ctx.arc(tex,tey,5,0,Math.PI*2);
+    ctx.fillStyle='#7e57c2'; ctx.fill();
+  }
+
+  // electrical signal traveling along axon
+  var sigP=(t*0.4)%1;
+  var sigX=lerp(ax,aex,sigP), sigY=lerp(ay,aey,sigP);
+  ctx.beginPath(); ctx.arc(sigX,sigY,6+Math.sin(t*8)*2,0,Math.PI*2);
+  ctx.fillStyle=hexToRgba('#ffeb3b',0.8); ctx.fill();
+  ctx.shadowColor='#ffeb3b'; ctx.shadowBlur=10;
+  ctx.beginPath(); ctx.arc(sigX,sigY,6,0,Math.PI*2); ctx.fill();
+  ctx.shadowBlur=0;
+
+  drawLabel('树突',cx-bodyR*2.5,cy-bodyR*1.5,fs,'#7e57c2');
+  drawLabel('细胞体',cx,cy+bodyR+16,fs,'#4a148c');
+  drawLabel('神经末梢',aex+20,aey+5,fs,'#4a148c');
+  drawLabel('感受刺激 · 传导兴奋',cx,cy+H*0.42,fs,'#4a148c');
+  this.phase='电信号沿轴突传导';
+};
+
+/* ===== SECTION: Protective Tissue (Plant) ===== */
+function ProtTissueAnim() { BaseAnim.call(this); this.duration=7; }
+ProtTissueAnim.prototype = Object.create(BaseAnim.prototype);
+ProtTissueAnim.prototype.setup = function(){ this.elapsed=0; };
+ProtTissueAnim.prototype.draw = function() {
+  var cx=W/2, cy=H/2, t=(this.elapsed%this.duration)/this.duration, fs=Math.max(12,Math.min(15,W*0.028));
+  drawLabel('🔬 保护组织',cx,22,Math.max(14,fs+1),'#33691e');
+
+  var cols=8, rows=2;
+  var cellW=Math.min(W*0.1,42), cellH=cellW*0.6;
+  var gap=2;
+  var totalW=cols*(cellW+gap), startX=cx-totalW/2, startY=cy-rows*(cellH+gap)/2;
+  var fillP=easeInOut(Math.min(1,t*2));
+
+  // leaf cross-section background
+  ctx.beginPath();
+  ctx.roundRect(startX-15,startY-30,totalW+30,rows*(cellH+gap)+60,12);
+  ctx.fillStyle=hexToRgba('#c8e6c9',0.2); ctx.fill();
+
+  // cuticle layer on top
+  var cutP=Math.max(0,Math.min(1,(fillP-0.5)/0.3));
+  if(cutP>0){
+    ctx.globalAlpha=cutP;
+    ctx.beginPath(); ctx.rect(startX-5,startY-8,totalW+10,6);
+    ctx.fillStyle=hexToRgba('#fdd835',0.5); ctx.fill();
+    drawLabel('角质层',cx,startY-18,fs*0.85,'#f9a825');
+    ctx.globalAlpha=1;
+  }
+
+  var idx=0;
+  for(var r=0;r<rows;r++) for(var c=0;c<cols;c++){
+    var ratio=idx/(rows*cols);
+    var cellP=Math.max(0,Math.min(1,(fillP-ratio*0.4)/0.4));
+    if(cellP<=0){idx++;continue;}
+    ctx.globalAlpha=cellP;
+    var x=startX+c*(cellW+gap), y=startY+r*(cellH+gap);
+    // irregular shape for epidermal cells
+    ctx.beginPath();
+    ctx.moveTo(x+2,y); ctx.lineTo(x+cellW-2,y);
+    ctx.quadraticCurveTo(x+cellW+1,y+cellH*0.5,x+cellW-2,y+cellH);
+    ctx.lineTo(x+2,y+cellH);
+    ctx.quadraticCurveTo(x-1,y+cellH*0.5,x+2,y);
+    ctx.closePath();
+    ctx.fillStyle=hexToRgba('#a5d6a7',0.5); ctx.fill();
+    ctx.strokeStyle='#33691e'; ctx.lineWidth=1.5; ctx.stroke();
+    // nucleus
+    ctx.beginPath(); ctx.ellipse(x+cellW/2,y+cellH/2,cellW*0.12,cellH*0.2,0,0,Math.PI*2);
+    ctx.fillStyle='#2e7d32'; ctx.fill();
+    ctx.globalAlpha=1;
+    idx++;
+  }
+
+  // stomata (gap between two guard cells)
+  if(fillP>0.6){
+    var sP=Math.min(1,(fillP-0.6)/0.3);
+    ctx.globalAlpha=sP;
+    var sx=startX+totalW*0.4, sy=startY+rows*(cellH+gap)-cellH*0.3;
+    // guard cells
+    ctx.beginPath(); ctx.ellipse(sx-8,sy+cellH*0.5,6,cellH*0.5,0,0,Math.PI*2);
+    ctx.fillStyle=hexToRgba('#66bb6a',0.7); ctx.fill(); ctx.strokeStyle='#1b5e20'; ctx.lineWidth=1.5; ctx.stroke();
+    ctx.beginPath(); ctx.ellipse(sx+8,sy+cellH*0.5,6,cellH*0.5,0,0,Math.PI*2);
+    ctx.fillStyle=hexToRgba('#66bb6a',0.7); ctx.fill(); ctx.strokeStyle='#1b5e20'; ctx.lineWidth=1.5; ctx.stroke();
+    // pore
+    ctx.beginPath(); ctx.ellipse(sx,sy+cellH*0.5,3,cellH*0.3,0,0,Math.PI*2);
+    ctx.fillStyle='#e8f5e9'; ctx.fill();
+    drawLabel('气孔',sx,sy+cellH+18,fs*0.85,'#1b5e20');
+    ctx.globalAlpha=1;
+  }
+
+  // water droplets being blocked
+  if(fillP>0.8){
+    ctx.globalAlpha=Math.min(1,(fillP-0.8)/0.2);
+    for(var i=0;i<4;i++){
+      var dx=startX+totalW*0.2+i*totalW*0.2;
+      var dy=startY-35-Math.sin(t*3+i)*5;
+      ctx.beginPath(); ctx.arc(dx,dy,4,0,Math.PI*2);
+      ctx.fillStyle=hexToRgba('#64b5f6',0.6); ctx.fill();
+    }
+    drawLabel('🛡️ 防止水分散失',cx,startY-50,fs,'#1565c0');
+    ctx.globalAlpha=1;
+  }
+
+  drawLabel('排列紧密 · 保护内部柔嫩部分',cx,startY+rows*(cellH+gap)+40,fs,'#33691e');
+  this.phase=fillP<0.5?'表皮细胞排列紧密…':'形成保护层，减少水分散失';
+};
+
+/* ===== SECTION: Parenchyma (Thin-wall) Tissue ===== */
+function ParenTissueAnim() { BaseAnim.call(this); this.duration=8; }
+ParenTissueAnim.prototype = Object.create(BaseAnim.prototype);
+ParenTissueAnim.prototype.setup = function(){ this.elapsed=0; };
+ParenTissueAnim.prototype.draw = function() {
+  var cx=W/2, cy=H/2, t=(this.elapsed%this.duration)/this.duration, fs=Math.max(12,Math.min(15,W*0.028));
+  drawLabel('🔬 薄壁组织（营养组织）',cx,22,Math.max(14,fs+1),'#558b2f');
+
+  var rows=3, cols=5;
+  var cellR=Math.min(W,H)*0.065;
+  var spacing=cellR*2.3;
+  var startX=cx-(cols-1)*spacing/2, startY=cy-(rows-1)*spacing/2;
+  var fillP=easeInOut(Math.min(1,t*1.8));
+
+  for(var r=0;r<rows;r++) for(var c=0;c<cols;c++){
+    var idx=r*cols+c, ratio=idx/(rows*cols);
+    var cellP=Math.max(0,Math.min(1,(fillP-ratio*0.4)/0.4));
+    if(cellP<=0) continue;
+    ctx.globalAlpha=cellP;
+    var x=startX+c*spacing, y=startY+r*spacing;
+
+    // large cell with thin wall
+    ctx.beginPath(); ctx.arc(x,y,cellR,0,Math.PI*2);
+    ctx.fillStyle=hexToRgba('#c5e1a5',0.4); ctx.fill();
+    ctx.strokeStyle='#689f38'; ctx.lineWidth=1.5; ctx.stroke();
+
+    // large vacuole
+    var vacR=cellR*0.5+Math.sin(t*1.5+idx)*2;
+    ctx.beginPath(); ctx.arc(x+cellR*0.1,y-cellR*0.05,vacR,0,Math.PI*2);
+    ctx.fillStyle=hexToRgba('#b3e5fc',0.4); ctx.fill();
+    ctx.strokeStyle='#4fc3f7'; ctx.lineWidth=1; ctx.stroke();
+
+    // chloroplasts (small green dots) in some cells
+    if(idx%2===0){
+      for(var ch=0;ch<4;ch++){
+        var ca=ch*Math.PI/2+t*0.5;
+        var chx=x+Math.cos(ca)*cellR*0.65, chy=y+Math.sin(ca)*cellR*0.65;
+        ctx.beginPath(); ctx.ellipse(chx,chy,4,3,ca,0,Math.PI*2);
+        ctx.fillStyle='#2e7d32'; ctx.fill();
+      }
+    }
+
+    // nucleus (pushed to side by vacuole)
+    ctx.beginPath(); ctx.arc(x-cellR*0.35,y+cellR*0.2,cellR*0.12,0,Math.PI*2);
+    ctx.fillStyle='#689f38'; ctx.fill();
+
+    ctx.globalAlpha=1;
+  }
+
+  // labels
+  if(fillP>0.6){
+    ctx.globalAlpha=Math.min(1,(fillP-0.6)/0.3);
+    drawLabel('壁薄',startX-cellR-25,startY,fs*0.85,'#689f38'); drawArrow(startX-cellR-15,startY,startX-cellR+2,startY,'#689f38');
+    drawLabel('液泡大',startX+spacing+cellR+25,startY,fs*0.85,'#0288d1'); drawArrow(startX+spacing+cellR+15,startY,startX+spacing+cellR-2,startY,'#0288d1');
+    if(fillP>0.8) drawLabel('🍎 果肉 · 叶肉 — 储存营养、光合作用',cx,cy+spacing*1.2+cellR+30,fs,'#558b2f');
+    ctx.globalAlpha=1;
+  }
+
+  this.phase=fillP<0.5?'薄壁细胞逐一出现…':'大量储存营养物质的细胞群';
+};
+
+/* ===== SECTION: Meristem Tissue ===== */
+function MeristemAnim() { BaseAnim.call(this); this.duration=8; }
+MeristemAnim.prototype = Object.create(BaseAnim.prototype);
+MeristemAnim.prototype.setup = function(){ this.elapsed=0; };
+MeristemAnim.prototype.draw = function() {
+  var cx=W/2, cy=H/2, t=(this.elapsed%this.duration)/this.duration, fs=Math.max(12,Math.min(15,W*0.028));
+  drawLabel('🔬 分生组织',cx,22,Math.max(14,fs+1),'#1b5e20');
+
+  var cellR=Math.min(W,H)*0.04;
+  var spacing=cellR*2.1;
+
+  // Root tip shape
+  var layers=5;
+  for(var layer=0;layer<layers;layer++){
+    var cols=layer+2;
+    var layerY=cy-H*0.15+layer*spacing;
+    var layerStartX=cx-(cols-1)*spacing/2;
+
+    for(var c=0;c<cols;c++){
+      var x=layerStartX+c*spacing, y=layerY;
+      // cell division animation
+      var divPhase=(t+layer*0.1+c*0.05)%1;
+
+      if(divPhase<0.4){
+        // single small cell
+        var r=cellR*(0.8+Math.sin(t*2+layer+c)*0.05);
+        ctx.beginPath(); ctx.arc(x,y,r,0,Math.PI*2);
+        ctx.fillStyle=hexToRgba('#a5d6a7',0.5); ctx.fill();
+        ctx.strokeStyle='#1b5e20'; ctx.lineWidth=1.5; ctx.stroke();
+        // large nucleus
+        ctx.beginPath(); ctx.arc(x,y,r*0.45,0,Math.PI*2);
+        ctx.fillStyle='#2e7d32'; ctx.fill();
+      } else if(divPhase<0.7){
+        // dividing
+        var dp=(divPhase-0.4)/0.3;
+        var sep=dp*cellR*0.5;
+        ctx.beginPath(); ctx.ellipse(x,y,cellR*(1+dp*0.3),cellR*0.9,0,0,Math.PI*2);
+        ctx.fillStyle=hexToRgba('#a5d6a7',0.35); ctx.fill();
+        ctx.strokeStyle='#1b5e20'; ctx.lineWidth=1.5; ctx.stroke();
+        // two nuclei separating
+        ctx.beginPath(); ctx.arc(x-sep,y,cellR*0.25,0,Math.PI*2); ctx.fillStyle='#2e7d32'; ctx.fill();
+        ctx.beginPath(); ctx.arc(x+sep,y,cellR*0.25,0,Math.PI*2); ctx.fillStyle='#2e7d32'; ctx.fill();
+        // cell plate forming
+        ctx.beginPath(); ctx.moveTo(x,y-cellR*0.9); ctx.lineTo(x,y+cellR*0.9);
+        ctx.strokeStyle=hexToRgba('#1b5e20',dp); ctx.lineWidth=1.5; ctx.stroke();
+      } else {
+        // two daughter cells
+        var dp=(divPhase-0.7)/0.3;
+        var sep=cellR*0.5+dp*cellR*0.3;
+        var nr=cellR*0.6*(0.5+dp*0.5);
+        ctx.beginPath(); ctx.arc(x-sep,y,nr,0,Math.PI*2);
+        ctx.fillStyle=hexToRgba('#a5d6a7',0.5); ctx.fill(); ctx.strokeStyle='#1b5e20'; ctx.lineWidth=1.5; ctx.stroke();
+        ctx.beginPath(); ctx.arc(x-sep,y,nr*0.4,0,Math.PI*2); ctx.fillStyle='#2e7d32'; ctx.fill();
+        ctx.beginPath(); ctx.arc(x+sep,y,nr,0,Math.PI*2);
+        ctx.fillStyle=hexToRgba('#a5d6a7',0.5); ctx.fill(); ctx.strokeStyle='#1b5e20'; ctx.lineWidth=1.5; ctx.stroke();
+        ctx.beginPath(); ctx.arc(x+sep,y,nr*0.4,0,Math.PI*2); ctx.fillStyle='#2e7d32'; ctx.fill();
+      }
+    }
+  }
+
+  // root cap at bottom
+  ctx.beginPath();
+  ctx.moveTo(cx-spacing*1.5,cy+H*0.25);
+  ctx.quadraticCurveTo(cx,cy+H*0.35,cx+spacing*1.5,cy+H*0.25);
+  ctx.fillStyle=hexToRgba('#bcaaa4',0.4); ctx.fill();
+  ctx.strokeStyle='#795548'; ctx.lineWidth=2; ctx.stroke();
+  drawLabel('根冠',cx,cy+H*0.32,fs,'#795548');
+
+  // annotations
+  drawLabel('细胞小 · 壁薄 · 核大 · 质浓',cx,cy-H*0.32,fs,'#1b5e20');
+  drawLabel('不断分裂产生新细胞',cx,cy+H*0.42,fs,'#1b5e20');
+  this.phase='分生区细胞不断分裂';
+};
+
+/* ===== SECTION: Vascular Tissue ===== */
+function VascTissueAnim() { BaseAnim.call(this); this.duration=8; this.waterDrops=[]; this.sugarDots=[]; }
+VascTissueAnim.prototype = Object.create(BaseAnim.prototype);
+VascTissueAnim.prototype.setup = function() {
+  this.elapsed=0; this.waterDrops=[]; this.sugarDots=[];
+  for(var i=0;i<5;i++) this.waterDrops.push({pos:Math.random(), speed:0.15+Math.random()*0.1});
+  for(var i=0;i<4;i++) this.sugarDots.push({pos:Math.random(), speed:0.1+Math.random()*0.08});
+};
+VascTissueAnim.prototype.draw = function() {
+  var cx=W/2, cy=H/2, t=this.elapsed, fs=Math.max(12,Math.min(15,W*0.028));
+  drawLabel('🔬 输导组织',cx,22,Math.max(14,fs+1),'#00695c');
+
+  var tubeW=Math.min(W*0.12,48), tubeH=H*0.6;
+  var tubeTop=cy-tubeH/2;
+
+  // === Xylem (导管) - LEFT ===
+  var ductX=cx-W*0.18;
+  // tube walls
+  ctx.fillStyle=hexToRgba('#bcaaa4',0.3);
+  ctx.fillRect(ductX-tubeW/2,tubeTop,tubeW,tubeH);
+  ctx.strokeStyle='#795548'; ctx.lineWidth=2.5;
+  ctx.strokeRect(ductX-tubeW/2,tubeTop,tubeW,tubeH);
+
+  // cell wall thickenings (rings)
+  for(var i=0;i<8;i++){
+    var ry=tubeTop+i*tubeH/8+tubeH/16;
+    ctx.beginPath(); ctx.moveTo(ductX-tubeW/2,ry); ctx.lineTo(ductX+tubeW/2,ry);
+    ctx.strokeStyle=hexToRgba('#795548',0.5); ctx.lineWidth=2; ctx.stroke();
+  }
+
+  // water drops moving UP
+  for(var i=0;i<this.waterDrops.length;i++){
+    var d=this.waterDrops[i];
+    d.pos=(d.pos+0.004*d.speed)%1;
+    var dy=tubeTop+tubeH-d.pos*tubeH;
+    ctx.beginPath(); ctx.arc(ductX+Math.sin(t*2+i)*5,dy,5,0,Math.PI*2);
+    ctx.fillStyle=hexToRgba('#42a5f5',0.7); ctx.fill();
+    ctx.shadowColor='#42a5f5'; ctx.shadowBlur=4;
+    ctx.beginPath(); ctx.arc(ductX+Math.sin(t*2+i)*5,dy,5,0,Math.PI*2); ctx.fill();
+    ctx.shadowBlur=0;
+  }
+
+  // Up arrow
+  drawArrow(ductX,tubeTop+tubeH+15,ductX,tubeTop-10,'#1565c0');
+  drawLabel('导管',ductX,tubeTop-22,fs,'#795548');
+  drawLabel('水+无机盐 ↑',ductX,tubeTop+tubeH+30,fs*0.85,'#1565c0');
+  drawLabel('（死细胞）',ductX,tubeTop+tubeH+46,fs*0.75,'#78909c');
+
+  // === Phloem (筛管) - RIGHT ===
+  var sieveX=cx+W*0.18;
+  ctx.fillStyle=hexToRgba('#c5e1a5',0.3);
+  ctx.fillRect(sieveX-tubeW/2,tubeTop,tubeW,tubeH);
+  ctx.strokeStyle='#558b2f'; ctx.lineWidth=2.5;
+  ctx.strokeRect(sieveX-tubeW/2,tubeTop,tubeW,tubeH);
+
+  // sieve plates
+  for(var i=0;i<6;i++){
+    var py=tubeTop+i*tubeH/6+tubeH/12;
+    ctx.beginPath();
+    ctx.moveTo(sieveX-tubeW/2+3,py); ctx.lineTo(sieveX+tubeW/2-3,py);
+    ctx.strokeStyle=hexToRgba('#558b2f',0.5); ctx.lineWidth=2;
+    ctx.setLineDash([3,3]); ctx.stroke(); ctx.setLineDash([]);
+  }
+
+  // sugar dots moving DOWN
+  for(var i=0;i<this.sugarDots.length;i++){
+    var d=this.sugarDots[i];
+    d.pos=(d.pos+0.003*d.speed)%1;
+    var dy=tubeTop+d.pos*tubeH;
+    ctx.beginPath(); ctx.arc(sieveX+Math.sin(t*1.5+i)*4,dy,4,0,Math.PI*2);
+    ctx.fillStyle=hexToRgba('#ff8f00',0.7); ctx.fill();
+  }
+
+  // Down arrow
+  drawArrow(sieveX,tubeTop-10,sieveX,tubeTop+tubeH+15,'#e65100');
+  drawLabel('筛管',sieveX,tubeTop-22,fs,'#558b2f');
+  drawLabel('有机物 ↓',sieveX,tubeTop+tubeH+30,fs*0.85,'#e65100');
+  drawLabel('（活细胞）',sieveX,tubeTop+tubeH+46,fs*0.75,'#78909c');
+
+  // center: plant stem cross-section
+  var stemR=Math.min(W,H)*0.06;
+  ctx.beginPath(); ctx.arc(cx,cy,stemR,0,Math.PI*2);
+  ctx.fillStyle=hexToRgba('#a5d6a7',0.4); ctx.fill();
+  ctx.strokeStyle='#2e7d32'; ctx.lineWidth=2; ctx.stroke();
+  // vascular bundles inside
+  for(var i=0;i<4;i++){
+    var a=Math.PI/2*i+Math.PI/4;
+    ctx.beginPath(); ctx.arc(cx+Math.cos(a)*stemR*0.5,cy+Math.sin(a)*stemR*0.5,4,0,Math.PI*2);
+    ctx.fillStyle='#795548'; ctx.fill();
+  }
+  drawLabel('茎横切',cx,cy+stemR+16,fs*0.85,'#2e7d32');
+
+  this.phase='导管向上运水 · 筛管向下运有机物';
+};
+
+/* ===== SECTION: Organ Animation ===== */
+function OrganAnim() { BaseAnim.call(this); this.duration=9; }
+OrganAnim.prototype = Object.create(BaseAnim.prototype);
+OrganAnim.prototype.setup = function(){ this.elapsed=0; };
+OrganAnim.prototype.draw = function() {
+  var cx=W/2, cy=H/2, t=(this.elapsed%this.duration)/this.duration, fs=Math.max(12,Math.min(15,W*0.028));
+  var size=Math.min(W,H)*0.3;
+  drawLabel('🔬 器官 — 不同组织构成',cx,22,Math.max(14,fs+1),'#1b5e20');
+  var ap=easeInOut(Math.min(1,t*1.8));
+
+  // Layer 1
+  var l1=Math.min(1,ap*3);
+  if(l1>0){ctx.globalAlpha=l1;ctx.beginPath();ctx.ellipse(cx,cy,size,size*0.7,0,0,Math.PI*2);ctx.fillStyle=hexToRgba('#ffcc80',0.5);ctx.fill();ctx.strokeStyle='#e65100';ctx.lineWidth=2.5;ctx.stroke();ctx.globalAlpha=1;}
+  // Layer 2
+  var l2=Math.max(0,Math.min(1,(ap-0.2)*2.5));
+  if(l2>0){ctx.globalAlpha=l2;ctx.beginPath();ctx.ellipse(cx,cy,size*0.82,size*0.56,0,0,Math.PI*2);ctx.fillStyle=hexToRgba('#ef9a9a',0.5);ctx.fill();ctx.strokeStyle='#c62828';ctx.lineWidth=2;ctx.stroke();ctx.globalAlpha=1;}
+  // Layer 3
+  var l3=Math.max(0,Math.min(1,(ap-0.4)*2.5));
+  if(l3>0){ctx.globalAlpha=l3;ctx.beginPath();ctx.ellipse(cx,cy,size*0.62,size*0.4,0,0,Math.PI*2);ctx.fillStyle=hexToRgba('#90caf9',0.5);ctx.fill();ctx.strokeStyle='#1565c0';ctx.lineWidth=1.5;ctx.stroke();ctx.globalAlpha=1;}
+  // Inner
+  var l4=Math.max(0,Math.min(1,(ap-0.6)*2.5));
+  if(l4>0){ctx.globalAlpha=l4;ctx.beginPath();ctx.ellipse(cx,cy,size*0.38,size*0.22,0,0,Math.PI*2);ctx.fillStyle=hexToRgba('#fff9c4',0.6);ctx.fill();ctx.strokeStyle='#f9a825';ctx.lineWidth=1.5;ctx.stroke();ctx.globalAlpha=1;}
+
+  if(ap>0.7){
+    var la=Math.min(1,(ap-0.7)/0.3);
+    ctx.globalAlpha=la;
+    var lx=cx+size+20;
+    drawLabel('上皮组织',lx,cy-size*0.5,fs*0.9,'#e65100');drawArrow(lx-28,cy-size*0.5,cx+size*0.92,cy-size*0.45,'#e65100');
+    drawLabel('肌肉组织',lx,cy-size*0.15,fs*0.9,'#c62828');drawArrow(lx-28,cy-size*0.15,cx+size*0.75,cy-size*0.1,'#c62828');
+    drawLabel('结缔组织',lx,cy+size*0.15,fs*0.9,'#1565c0');drawArrow(lx-28,cy+size*0.15,cx+size*0.55,cy+size*0.15,'#1565c0');
+    ctx.globalAlpha=1;
+  }
+  if(t>0.6) drawLabel('多种组织 → 胃（器官）',cx,cy+size*0.7+25,fs+1,'#e65100');
+  this.phase=ap<0.4?'各组织层逐渐出现…':'组合形成器官';
+};
+
+/* ===== SECTION: System Animation ===== */
+function SystemAnim() { BaseAnim.call(this); this.duration=12; }
+SystemAnim.prototype = Object.create(BaseAnim.prototype);
+SystemAnim.prototype.setup = function(){ this.elapsed=0; };
+SystemAnim.prototype.draw = function() {
+  var cx=W/2, cy=H/2, t=(this.elapsed%this.duration)/this.duration, fs=Math.max(11,Math.min(14,W*0.025));
+  drawLabel('🔬 系统 — 多个器官协同工作',cx,22,Math.max(14,fs+1),'#1b5e20');
+  var organs=[
+    {name:'口腔',x:cx,y:cy-H*0.32,r:18,color:'#ffcc80'},
+    {name:'食道',x:cx,y:cy-H*0.16,r:12,color:'#ffe0b2'},
+    {name:'胃',x:cx+W*0.08,y:cy+H*0.02,r:25,color:'#ef9a9a'},
+    {name:'肝脏',x:cx-W*0.18,y:cy-H*0.02,r:22,color:'#a1887f'},
+    {name:'小肠',x:cx-W*0.05,y:cy+H*0.2,r:20,color:'#ce93d8'},
+    {name:'大肠',x:cx+W*0.1,y:cy+H*0.32,r:22,color:'#90caf9'}
+  ];
+  var sp=easeInOut(Math.min(1,t*3));
+  ctx.strokeStyle=hexToRgba('#78909c',0.4*sp);ctx.lineWidth=6;ctx.lineCap='round';
+  ctx.beginPath();ctx.moveTo(organs[0].x,organs[0].y+organs[0].r);ctx.lineTo(organs[1].x,organs[1].y-organs[1].r);ctx.lineTo(organs[2].x,organs[2].y-organs[2].r);ctx.lineTo(organs[4].x,organs[4].y-organs[4].r);ctx.lineTo(organs[5].x,organs[5].y-organs[5].r);ctx.stroke();
+  ctx.beginPath();ctx.moveTo(organs[3].x+organs[3].r,organs[3].y);ctx.lineTo(organs[2].x-organs[2].r,organs[2].y-5);ctx.stroke();
+  for(var i=0;i<organs.length;i++){
+    var o=organs[i],op=Math.min(1,sp*2-i*0.12);
+    if(op<=0)continue;ctx.globalAlpha=op;
+    ctx.beginPath();ctx.arc(o.x,o.y,o.r*op,0,Math.PI*2);ctx.fillStyle=o.color;ctx.fill();ctx.strokeStyle='#455a64';ctx.lineWidth=2;ctx.stroke();
+    drawLabel(o.name,o.x,o.y+o.r+14,fs,'#263238');ctx.globalAlpha=1;
+  }
+  if(t>0.35){
+    var pt=((t-0.35)/0.65)%1, path=[{x:organs[0].x,y:organs[0].y},{x:organs[1].x,y:organs[1].y},{x:organs[2].x,y:organs[2].y},{x:organs[4].x,y:organs[4].y},{x:organs[5].x,y:organs[5].y}];
+    var ts=path.length-1,seg=Math.floor(pt*ts),segT=(pt*ts)-seg;if(seg>=ts){seg=ts-1;segT=1;}
+    var px=lerp(path[seg].x,path[seg+1].x,segT),py=lerp(path[seg].y,path[seg+1].y,segT);
+    ctx.beginPath();ctx.arc(px,py,5,0,Math.PI*2);ctx.fillStyle='#ff8f00';ctx.fill();
+    ctx.shadowColor='#ff8f00';ctx.shadowBlur=8;ctx.beginPath();ctx.arc(px,py,5,0,Math.PI*2);ctx.fill();ctx.shadowBlur=0;
+  }
+  if(sp>0.8) drawLabel('消化系统 — 器官协同完成消化功能',cx,cy+H*0.42,fs+1,'#00695c');
+  this.phase=sp<0.5?'各器官依次出现…':'食物在系统中流动';
+};
+
+/* ===== SECTION: Animal Body Hierarchy ===== */
+function AnimalHierAnim() { BaseAnim.call(this); this.duration=10; }
+AnimalHierAnim.prototype = Object.create(BaseAnim.prototype);
+AnimalHierAnim.prototype.setup = function(){ this.elapsed=0; };
+AnimalHierAnim.prototype.draw = function() {
+  var cx=W/2, cy=H/2, t=(this.elapsed%this.duration)/this.duration, fs=Math.max(12,Math.min(15,W*0.028));
+  drawLabel('🔬 动物体的结构层次',cx,18,Math.max(14,fs+1),'#c62828');
+
+  var levels=[
+    {name:'细胞',icon:'🔵',color:'#4caf50',desc:'基本单位'},
+    {name:'组织',icon:'🟡',color:'#ffc107',desc:'上皮·结缔·肌肉·神经'},
+    {name:'器官',icon:'🟠',color:'#ff9800',desc:'心·胃·肺…'},
+    {name:'系统',icon:'🔴',color:'#e53935',desc:'八大系统'},
+    {name:'动物体',icon:'🐕',color:'#c62828',desc:'完整个体'}
+  ];
+  var total=levels.length;
+  var boxW=Math.min(W*0.16,75), boxH=Math.min(H*0.15,55);
+  var totalW=(total-1)*(boxW+20)+boxW;
+  var startX=cx-totalW/2;
+  var showP=easeInOut(Math.min(1,t*2));
+
+  for(var i=0;i<total;i++){
+    var ratio=i/(total-1);
+    var lp=Math.max(0,Math.min(1,(showP-ratio*0.5)/0.3));
+    if(lp<=0) continue;
+    ctx.globalAlpha=lp;
+
+    var x=startX+i*(boxW+20), y=cy-boxH/2;
+    // box
+    ctx.beginPath(); ctx.roundRect(x,y,boxW,boxH,10);
+    ctx.fillStyle=hexToRgba(levels[i].color,0.15); ctx.fill();
+    ctx.strokeStyle=levels[i].color; ctx.lineWidth=2.5; ctx.stroke();
+    // icon
+    drawLabel(levels[i].icon,x+boxW/2,y+boxH*0.3,fs+4,'');
+    // name
+    drawLabel(levels[i].name,x+boxW/2,y+boxH*0.7,fs*0.9,levels[i].color);
+    // description
+    drawLabel(levels[i].desc,x+boxW/2,y+boxH+14,fs*0.72,'#546e7a');
+
+    // arrow
+    if(i<total-1){
+      var ax1=x+boxW+2, ax2=x+boxW+18, ay=y+boxH/2;
+      drawArrow(ax1,ay,ax2,ay,levels[i].color);
+    }
+    ctx.globalAlpha=1;
+  }
+
+  // Highlight current level
+  var highlightIdx=Math.floor(t*total*0.8)%total;
+  var hx=startX+highlightIdx*(boxW+20);
+  ctx.beginPath(); ctx.roundRect(hx-3,cy-boxH/2-3,boxW+6,boxH+6,12);
+  ctx.strokeStyle=hexToRgba(levels[highlightIdx].color,0.5+Math.sin(t*4)*0.3);
+  ctx.lineWidth=3; ctx.stroke();
+
+  // Bottom: comparison note
+  if(showP>0.7){
+    ctx.globalAlpha=Math.min(1,(showP-0.7)/0.3);
+    drawLabel('与植物体相比，多了"系统"这一层次',cx,cy+H*0.38,fs,'#c62828');
+    ctx.globalAlpha=1;
+  }
+
+  this.phase=levels[highlightIdx].name+' — '+levels[highlightIdx].desc;
+};
+
+/* ===== SECTION: Plant Body Hierarchy ===== */
+function PlantHierAnim() { BaseAnim.call(this); this.duration=10; }
+PlantHierAnim.prototype = Object.create(BaseAnim.prototype);
+PlantHierAnim.prototype.setup = function(){ this.elapsed=0; };
+PlantHierAnim.prototype.draw = function() {
+  var cx=W/2, cy=H/2, t=(this.elapsed%this.duration)/this.duration, fs=Math.max(12,Math.min(15,W*0.028));
+  drawLabel('🔬 植物体的结构层次',cx,18,Math.max(14,fs+1),'#1b5e20');
+
+  var levels=[
+    {name:'细胞',icon:'🔵',color:'#4caf50',desc:'基本单位'},
+    {name:'组织',icon:'🟢',color:'#66bb6a',desc:'保护·营养·分生·输导'},
+    {name:'器官',icon:'🌿',color:'#2e7d32',desc:'根·茎·叶·花·果·种'},
+    {name:'植物体',icon:'🌳',color:'#1b5e20',desc:'完整个体'}
+  ];
+  var total=levels.length;
+  var boxW=Math.min(W*0.18,80), boxH=Math.min(H*0.15,55);
+  var totalW=(total-1)*(boxW+25)+boxW;
+  var startX=cx-totalW/2;
+  var showP=easeInOut(Math.min(1,t*2));
+
+  for(var i=0;i<total;i++){
+    var ratio=i/(total-1);
+    var lp=Math.max(0,Math.min(1,(showP-ratio*0.5)/0.3));
+    if(lp<=0) continue;
+    ctx.globalAlpha=lp;
+
+    var x=startX+i*(boxW+25), y=cy-boxH/2-10;
+    ctx.beginPath(); ctx.roundRect(x,y,boxW,boxH,10);
+    ctx.fillStyle=hexToRgba(levels[i].color,0.15); ctx.fill();
+    ctx.strokeStyle=levels[i].color; ctx.lineWidth=2.5; ctx.stroke();
+    drawLabel(levels[i].icon,x+boxW/2,y+boxH*0.3,fs+4,'');
+    drawLabel(levels[i].name,x+boxW/2,y+boxH*0.7,fs*0.9,levels[i].color);
+    drawLabel(levels[i].desc,x+boxW/2,y+boxH+14,fs*0.72,'#546e7a');
+    if(i<total-1){
+      var ax1=x+boxW+2,ax2=x+boxW+23,ay=y+boxH/2;
+      drawArrow(ax1,ay,ax2,ay,levels[i].color);
+    }
+    ctx.globalAlpha=1;
+  }
+
+  // Six organs illustration at bottom
+  if(showP>0.5){
+    var op=Math.min(1,(showP-0.5)/0.3);
+    ctx.globalAlpha=op;
+    var organNames=['根','茎','叶','花','果实','种子'];
+    var organColors=['#795548','#8d6e63','#4caf50','#e91e63','#ff9800','#ffc107'];
+    var organIcons=['🥕','🌾','🍃','🌸','🍎','🫘'];
+    var oSpacing=Math.min(W*0.14,60);
+    var oStartX=cx-(organNames.length-1)*oSpacing/2;
+    var oY=cy+H*0.25;
+    for(var i=0;i<organNames.length;i++){
+      var ox=oStartX+i*oSpacing;
+      ctx.beginPath();ctx.arc(ox,oY,16,0,Math.PI*2);
+      ctx.fillStyle=hexToRgba(organColors[i],0.2);ctx.fill();
+      ctx.strokeStyle=organColors[i];ctx.lineWidth=1.5;ctx.stroke();
+      drawLabel(organIcons[i],ox,oY,fs+2,'');
+      drawLabel(organNames[i],ox,oY+24,fs*0.8,organColors[i]);
+    }
+    // labels
+    drawLabel('营养器官',cx-oSpacing*2,oY+42,fs*0.75,'#2e7d32');
+    drawLabel('生殖器官',cx+oSpacing*1.5,oY+42,fs*0.75,'#c62828');
+    ctx.globalAlpha=1;
+  }
+
+  // Note: no "system" level
+  if(showP>0.8){
+    ctx.globalAlpha=Math.min(1,(showP-0.8)/0.2);
+    drawLabel('植物体没有"系统"层次',cx,cy+H*0.42,fs,'#1b5e20');
+    ctx.globalAlpha=1;
+  }
+
+  var hIdx=Math.floor(t*total*0.8)%total;
+  this.phase=levels[hIdx].name+' — '+levels[hIdx].desc;
+};
+
+/* ===== SECTION: animation map ===== */
+var ANIM_MAP = {
+  '细胞': CellAnim,
+  '细胞分裂': DivisionAnim,
+  '细胞生长': GrowthAnim,
+  '细胞分化': DiffAnim,
+  '线粒体': MitoAnim,
+  '叶绿体': ChloroAnim,
+  '组织': TissueAnim,
+  '上皮组织': EpiTissueAnim,
+  '结缔组织': ConnTissueAnim,
+  '肌肉组织': MuscleTissueAnim,
+  '神经组织': NerveTissueAnim,
+  '保护组织': ProtTissueAnim,
+  '薄壁组织': ParenTissueAnim,
+  '分生组织': MeristemAnim,
+  '输导组织': VascTissueAnim,
+  '器官': OrganAnim,
+  '系统': SystemAnim,
+  '动物体结构层次': AnimalHierAnim,
+  '植物体结构层次': PlantHierAnim
+};
+
+/* ===== SECTION: search logic ===== */
+function findTerm(input) {
+  var q = input.trim();
+  if (TERMS[q]) return q;
+  // exact match with aliases
+  var aliases = {'营养组织':'薄壁组织','基本组织':'薄壁组织'};
+  if (aliases[q]) return aliases[q];
+  // partial match — prefer longer matches
+  var best = null, bestLen = 0;
+  for (var key in TERMS) {
+    if (key.indexOf(q) >= 0 && key.length > bestLen) { best = key; bestLen = key.length; }
+    if (q.indexOf(key) >= 0 && key.length > bestLen) { best = key; bestLen = key.length; }
+  }
+  return best;
+}
+
+/* ===== SECTION: UI logic ===== */
+var mainContent = document.getElementById('mainContent');
+var welcomeView = document.getElementById('welcomeView');
+var infoPanel = document.getElementById('infoPanel');
+var phaseText = document.getElementById('phaseText');
+var searchInput = document.getElementById('searchInput');
+
+// create grouped quick tags
+(function() {
+  var container = document.getElementById('quickTags');
+  TERM_GROUPS.forEach(function(group) {
+    var label = document.createElement('div');
+    label.className = 'tag-group-label';
+    label.textContent = group.label;
+    container.appendChild(label);
+    group.terms.forEach(function(name) {
+      var btn = document.createElement('button');
+      btn.className = 'tag-btn' + (group.cat ? ' ' + group.cat : '');
+      btn.textContent = name;
+      btn.addEventListener('click', function() { searchInput.value = name; showTerm(name); });
+      container.appendChild(btn);
+    });
+  });
+})();
+
+// create hierarchy bar (core 7 levels)
+(function() {
+  var bar = document.getElementById('hierarchyBar');
+  var coreTerms = ['细胞','组织','器官','系统','动物体结构层次','植物体结构层次'];
+  var cls = ['h-c1','h-c2','h-c3','h-c4','h-c5','h-c6'];
+  coreTerms.forEach(function(name, i) {
+    if (i > 0) { var arrow = document.createElement('span'); arrow.className = 'h-arrow'; arrow.textContent = '→'; bar.appendChild(arrow); }
+    var item = document.createElement('span');
+    item.className = 'h-item ' + cls[i % cls.length];
+    item.textContent = name;
+    item.addEventListener('click', function() { searchInput.value = name; showTerm(name); });
+    bar.appendChild(item);
+  });
+})();
+
+function showTerm(name) {
+  var data = TERMS[name];
+  if (!data) return;
+  welcomeView.style.display = 'none';
+  mainContent.style.display = 'flex';
+  // highlight tag
+  document.querySelectorAll('.tag-btn').forEach(function(t) { t.classList.toggle('active', t.textContent === name); });
+  // highlight hierarchy
+  document.querySelectorAll('.h-item').forEach(function(t) {
+    t.style.transform = t.textContent === name ? 'scale(1.15)' : '';
+    t.style.boxShadow = t.textContent === name ? '0 2px 8px rgba(0,0,0,.15)' : '';
+  });
+  // info panel
+  var html = '<div><span class="term-name">' + name + '</span><span class="term-pinyin">' + data.pinyin + '</span></div>';
+  html += '<div class="term-def">' + data.def + '</div>';
+  html += '<div class="key-points"><h3>要点提示</h3><ul>';
+  data.points.forEach(function(p) { html += '<li>' + p + '</li>'; });
+  html += '</ul></div><button class="replay-btn" id="replayBtn">🔄 重新播放动画</button>';
+  infoPanel.innerHTML = html;
+  document.getElementById('replayBtn').addEventListener('click', function() { startAnimation(name); });
+  startAnimation(name);
+}
+
+function startAnimation(name) {
+  if (rafId) cancelAnimationFrame(rafId);
+  resizeCanvas();
+  var AnimClass = ANIM_MAP[name];
+  if (!AnimClass) return;
+  currentAnim = new AnimClass();
+  currentAnim.setup();
+  var lastTime = 0;
+  phaseText.classList.add('show');
+  function loop(timestamp) {
+    if (!lastTime) lastTime = timestamp;
+    var dt = Math.min((timestamp - lastTime) / 1000, 0.1);
+    lastTime = timestamp;
+    drawBg();
+    currentAnim.update(dt);
+    currentAnim.draw(ctx);
+    var ph = currentAnim.getPhase();
+    phaseText.textContent = ph;
+    phaseText.classList.toggle('show', !!ph);
+    rafId = requestAnimationFrame(loop);
+  }
+  rafId = requestAnimationFrame(loop);
+}
+
+// search handlers
+document.getElementById('searchBtn').addEventListener('click', doSearch);
+searchInput.addEventListener('keydown', function(e) { if (e.key === 'Enter') doSearch(); });
+var searchTimer = null;
+searchInput.addEventListener('input', function() { clearTimeout(searchTimer); searchTimer = setTimeout(doSearch, 400); });
+
+function doSearch() {
+  var val = searchInput.value.trim();
+  if (!val) { welcomeView.style.display = ''; mainContent.style.display = 'none'; return; }
+  var term = findTerm(val);
+  if (term) { searchInput.value = term; showTerm(term); }
+  else {
+    welcomeView.style.display = 'none'; mainContent.style.display = 'flex';
+    var suggestions = TERM_ORDER.map(function(n) { return '<span style="cursor:pointer;color:#00897b;text-decoration:underline;margin:0 3px">' + n + '</span>'; }).join('、');
+    infoPanel.innerHTML = '<div class="term-name" style="color:#c62828">未找到匹配的概念</div><div class="term-def">试试输入以下名词：' + suggestions + '</div>';
+    infoPanel.querySelectorAll('.term-def span').forEach(function(sp) {
+      sp.addEventListener('click', function() { searchInput.value = sp.textContent; showTerm(sp.textContent); });
+    });
+    if (rafId) { cancelAnimationFrame(rafId); rafId = null; }
+    ctx.clearRect(0,0,W,H); drawBg();
+    phaseText.classList.remove('show');
+    document.querySelectorAll('.tag-btn').forEach(function(t) { t.classList.remove('active'); });
+  }
+}
+</script>
+</body>
+</html>
